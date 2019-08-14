@@ -21,6 +21,7 @@ composer require dereuromark/cakephp-decimal:dev-master
 
 Also for now (needed for the above command):
 ```
+"minimum-stability": "dev",
 "repositories": [
     {
         "type": "git",
