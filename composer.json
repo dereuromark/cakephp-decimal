@@ -1,7 +1,7 @@
 {
 	"name": "dereuromark/cakephp-decimal",
 	"type": "library",
-	"description": "CakePHP plugin for decimal handling.",
+	"description": "CakePHP plugin for decimal handling via value object. Provides DecimalType class.",
 	"license": "MIT",
 	"require": {
 		"php": ">=7.1",
