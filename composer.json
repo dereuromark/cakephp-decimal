@@ -1,0 +1,38 @@
+{
+    "name": "dereuromark/cakephp-decimal",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1",
+        "cakephp/cakephp": "^3.7",
+        "spryker/decimal": "dev-master"
+    },
+    "require-dev": {
+        "fig-r/psr2r-sniffer": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "CakeDecimal\\": "src/",
+            "CakeDecimal\\Test\\Fixture\\": "tests/Fixture/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CakeDecimal\\Test\\": "tests/",
+            "App\\": "tests/test_app/src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@github.com:spryker/decimal.git"
+        }
+    ],
+    "scripts": {
+        "test": "php phpunit.phar",
+        "test-setup": "[ ! -f phpunit.phar ] && curl -OL https://phar.phpunit.de/phpunit-6.5.13.phar && mv phpunit-6.5.13.phar phpunit.phar || true",
+        "test-coverage" : "php phpunit.phar --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
+        "cs-check": "phpcs -p --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --extensions=php src/ tests/",
+        "cs-fix": "phpcbf -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --extensions=php src/ tests/"
+    }
+}
