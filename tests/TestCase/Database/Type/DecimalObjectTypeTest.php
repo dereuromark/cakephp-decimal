@@ -220,6 +220,9 @@ class DecimalObjectTypeTest extends TestCase {
 
 		$record = $this->Table->get($record->id);
 		$this->assertSame(4 / 3 + 7 / 3, $record->amount_nullable);
+
+		// Note the last digit rounded up
+		$this->assertSame(3.6666666666667, $record->amount_nullable);
 	}
 
 }
