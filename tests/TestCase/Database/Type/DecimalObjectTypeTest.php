@@ -8,6 +8,7 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Spryker\Decimal\Decimal;
 use TestApp\Model\Table\DecimalTypesTable;
+use TestApp\Model\Table\FloatTypesTable;
 
 /**
  * @link https://php-decimal.io/
@@ -19,7 +20,8 @@ class DecimalObjectTypeTest extends TestCase {
 	 * @var array
 	 */
 	public $fixtures = [
-		'plugin.CakeDecimal.DecimalTypes'
+		'plugin.CakeDecimal.DecimalTypes',
+		'plugin.CakeDecimal.FloatTypes'
 	];
 
 	/**
@@ -118,13 +120,15 @@ class DecimalObjectTypeTest extends TestCase {
 	}
 
 	/**
+	 * Show precision on match operations and DB write/read.
+	 *
 	 * @return void
 	 */
-	public function testPrecisionKeeping() {
+	public function testPrecisionDecimal() {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
-			'amount_required' => '0.000001',
-			'amount_nullable' => '0.000002',
+			'amount_required' => '0.000000000000000000000000000001',
+			'amount_nullable' => '0.000000000000000000000000000002',
 		]);
 		$this->Table->saveOrFail($record);
 
@@ -139,4 +143,29 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertTrue($record->amount_nullable->isZero());
 	}
 
+	/**
+	 * Compare handling of float to above Decimal usage.
+	 *
+	 * @return void
+	 */
+	public function testPrecisionFloat() {
+		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
+
+		$record = $this->Table->newEntity([
+			'name' => 'Foo',
+			'amount_required' => 0.000000000000000000000000000001,
+			'amount_nullable' => 0.000000000000000000000000000002,
+		]);
+		$this->Table->saveOrFail($record);
+
+		/** @var float $float */
+		$float = $record->amount_nullable;
+		$newFloat = $float - ($record->amount_required + $record->amount_required);
+		$record->amount_nullable = $newFloat;
+
+		$this->Table->saveOrFail($record);
+
+		$record = $this->Table->get($record->id);
+		$this->assertSame(0.0, $record->amount_nullable);
+	}
 }
