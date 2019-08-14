@@ -168,4 +168,5 @@ class DecimalObjectTypeTest extends TestCase {
 		$record = $this->Table->get($record->id);
 		$this->assertSame(0.0, $record->amount_nullable);
 	}
+
 }
