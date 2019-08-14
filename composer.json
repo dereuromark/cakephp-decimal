@@ -20,7 +20,7 @@
 	"autoload-dev": {
 		"psr-4": {
 			"CakeDecimal\\Test\\": "tests/",
-			"App\\": "tests/test_app/src/"
+			"TestApp\\": "tests/test_app/src/"
 		}
 	},
 	"repositories": [
@@ -41,6 +41,7 @@
 		"test-setup": "[ ! -f phpunit.phar ] && curl -OL https://phar.phpunit.de/phpunit-6.5.13.phar && mv phpunit-6.5.13.phar phpunit.phar || true",
 		"test-coverage" : "php phpunit.phar --log-junit tmp/coverage/unitreport.xml --coverage-html tmp/coverage --coverage-clover tmp/coverage/coverage.xml",
 		"phpstan": "vendor/bin/phpstan.phar analyse -c tests/phpstan.neon -l 7 src/",
+		"phpstan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan-shim:^0.11 && mv composer.backup composer.json",
 		"cs-check": "phpcs -p --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --extensions=php src/ tests/",
 		"cs-fix": "phpcbf -v --standard=vendor/fig-r/psr2r-sniffer/PSR2R/ruleset.xml --extensions=php src/ tests/"
 	}
