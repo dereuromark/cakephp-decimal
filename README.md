@@ -7,12 +7,12 @@ This is an alternative to the core one (using float in 3.x and string in 4.x)
  * and Shim plugin (using string in 3.x just like 4.x will).
  * As value object you have a few advantages, especially on handling the values inside your business logic.
  
- This branch is for use with **CakePHP 3.7+**.
+This branch is for use with **CakePHP 3.7+**.
  
 ## Requirements 
- 
- - Uses [spryker/decimal](https://github.com/spryker/decimal) and as such requires bcmath extension.
- 
+
+- Uses [spryker/decimal](https://github.com/spryker/decimal) and as such requires bcmath extension.
+
 ## Installation
 Require the plugin through Composer:
 ```

@@ -23,12 +23,6 @@
 			"TestApp\\": "tests/test_app/src/"
 		}
 	},
-	"repositories": [
-		{
-			"type": "git",
-			"url": "git@github.com:spryker/decimal.git"
-		}
-	],
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"extra": {
