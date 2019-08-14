@@ -58,6 +58,8 @@ protected function _initializeSchema(TableSchema $schema) {
 }
 ```
 
+For details on `Decimal` class, see [Decimal value object documentation](https://github.com/spryker/decimal/tree/master/docs).
+
 ## Customization
 
 You can extend the value object and use the same config as shown above to enable your custom Decimal VO extension class.
