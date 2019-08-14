@@ -169,4 +169,57 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertSame(0.0, $record->amount_nullable);
 	}
 
+	/**
+	 * Show precision on match operations and DB write/read.
+	 *
+	 * @return void
+	 */
+	public function testPrecisionDecimalExtended() {
+		$record = $this->Table->newEntity([
+			'name' => 'Foo',
+			'amount_required' => 4 / 3,
+			'amount_nullable' => 7 / 3,
+		]);
+		$this->Table->saveOrFail($record);
+
+		/** @var \Spryker\Decimal\Decimal $decimal */
+		$decimal = $record->amount_nullable;
+		$newDecimal = $record->amount_required->add($record->amount_nullable);
+		$record->amount_nullable = $newDecimal;
+
+		$this->Table->saveOrFail($record);
+
+		$record = $this->Table->get($record->id);
+		$this->assertSame('3.6666666666666', (string)$record->amount_nullable);
+
+		// Directly doing math on the floats reveals the precision issues
+		$this->assertSame('3.6666666666667', (string)Decimal::create(4 / 3 + 7 / 3));
+	}
+
+	/**
+	 * Compare handling of float to above Decimal usage.
+	 *
+	 * @return void
+	 */
+	public function testPrecisionFloatExtended() {
+		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
+
+		$record = $this->Table->newEntity([
+			'name' => 'Foo',
+			'amount_required' => 4 / 3,
+			'amount_nullable' => 7 / 3,
+		]);
+		$this->Table->saveOrFail($record);
+
+		/** @var float $float */
+		$float = $record->amount_nullable;
+		$newFloat = $record->amount_required + $record->amount_nullable;
+		$record->amount_nullable = $newFloat;
+
+		$this->Table->saveOrFail($record);
+
+		$record = $this->Table->get($record->id);
+		$this->assertSame(4 / 3 + 7 / 3, $record->amount_nullable);
+	}
+
 }
