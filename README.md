@@ -34,7 +34,7 @@ Also for now (needed for the above command):
 
 To enable this for all your decimal columns, use this in bootstrap:
 ```php
-Type::map('decimal', 'CakeDecimal\Database\Type\DecimalType');
+Type::map('decimal', 'CakeDecimal\Database\Type\DecimalObjectType');
  ```
 
 This will automatically replace the core behavior and map any incoming value to the value object on marshalling, 
@@ -42,7 +42,7 @@ and also convert your database values to it when reading.
 
 If you just want to map certain fields, you need to use an alias for those.
 ```php
-Type::map('decimal_object', 'CakeDecimal\Database\Type\DecimalType');
+Type::map('decimal_object', 'CakeDecimal\Database\Type\DecimalObjectType');
  ```
 Then inside your Table classes set them explicitly inside `_initializeSchema()`:
 ```php

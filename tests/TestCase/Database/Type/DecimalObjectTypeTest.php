@@ -79,6 +79,9 @@ class DecimalObjectTypeTest extends TestCase {
 		]);
 		$this->Table->saveOrFail($record);
 
+		$this->assertSame('0.000001', (string)$record->amount_required);
+		$this->assertSame('-1.11', (string)$record->amount_nullable);
+
 		$this->assertInstanceOf(Decimal::class, $record->amount_required);
 		$this->assertInstanceOf(Decimal::class, $record->amount_nullable);
 
@@ -87,7 +90,8 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertInstanceOf(Decimal::class, $record->amount_required);
 		$this->assertInstanceOf(Decimal::class, $record->amount_nullable);
 
-		$this->assertSame('0.000001', (string)$record->amount_required);
+		// Now it has the precision/scale of DB
+		$this->assertSame('0.0000010', (string)$record->amount_required);
 		$this->assertSame('-1.11', (string)$record->amount_nullable);
 	}
 
