@@ -28,6 +28,14 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	public static $numberClass = 'Cake\I18n\Number';
 
 	/**
+	 * Set to true to have auto-trimmed values coming from DB.
+	 * This makes form handling a bit easier, as it only outputs actual values of interest here.
+	 *
+	 * @var bool
+	 */
+	protected $_autoTrim = false;
+
+	/**
 	 * Whether numbers should be parsed using a locale aware parser
 	 * when marshalling string inputs.
 	 *
@@ -66,7 +74,12 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 			return $value;
 		}
 
-		return Decimal::create($value);
+		$decimal = Decimal::create($value);
+		if ($this->_autoTrim) {
+			return $decimal->trim();
+		}
+
+		return $decimal;
 	}
 
 	/**
@@ -121,6 +134,14 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param bool $enable
+	 * @return void
+	 */
+	public function useAutoTrim($enable = true) {
+		return $this->_autoTrim = $enable;
 	}
 
 	/**

@@ -61,6 +61,23 @@ protected function _initializeSchema(TableSchema $schema) {
 
 For details on `Decimal` class, see [Decimal value object documentation](https://github.com/spryker/decimal/tree/master/docs).
 
+
+## Configuration
+
+You can configure the Type class in your bootstrap.
+
+To enable auto trim:
+```php
+Type::build('decimal')
+    ->useAutoTrim();
+```
+
+To enable localization parsing:
+```php
+Type::build('decimal')
+    ->useLocaleParser();
+```
+
 ## Customization
 
 You can extend the value object and use the same config as shown above to enable your custom Decimal VO extension class.
