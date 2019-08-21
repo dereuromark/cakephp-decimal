@@ -6,7 +6,7 @@
 	"require": {
 		"php": ">=7.1",
 		"cakephp/cakephp": "^3.7",
-		"spryker/decimal": "1.x-dev"
+		"spryker/decimal-object": "1.x-dev"
 	},
 	"require-dev": {
 		"fig-r/psr2r-sniffer": "dev-master"

@@ -7,7 +7,7 @@ use Cake\Database\Type;
 use Cake\Database\Type\BatchCastingInterface;
 use PDO;
 use RuntimeException;
-use Spryker\Decimal\Decimal;
+use Spryker\DecimalObject\Decimal;
 
 /**
  * Decimal type converter using value object.
@@ -46,9 +46,9 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	/**
 	 * Convert integer data into the database format.
 	 *
-	 * @param string|int|float|\Spryker\Decimal\Decimal|null $value The value to convert.
+	 * @param string|int|float|\Spryker\DecimalObject\Decimal|null $value The value to convert.
 	 * @param \Cake\Database\Driver $driver The driver instance to convert with.
-	 * @return \Spryker\Decimal\Decimal|null
+	 * @return \Spryker\DecimalObject\Decimal|null
 	 * @throws \InvalidArgumentException
 	 */
 	public function toDatabase($value, Driver $driver) {
@@ -67,7 +67,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 *
 	 * @param string|int|float|null $value The value to convert.
 	 * @param \Cake\Database\Driver $driver The driver instance to convert with.
-	 * @return \Spryker\Decimal\Decimal|null
+	 * @return \Spryker\DecimalObject\Decimal|null
 	 */
 	public function toPHP($value, Driver $driver) {
 		if ($value === null) {
@@ -114,7 +114,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * Marshals request data into PHP Decimal value objects.
 	 *
 	 * @param mixed $value The value to convert.
-	 * @return \Spryker\Decimal\Decimal|null Converted value.
+	 * @return \Spryker\DecimalObject\Decimal|null Converted value.
 	 */
 	public function marshal($value) {
 		if ($value === null || $value === '') {
@@ -175,7 +175,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * aware parser.
 	 *
 	 * @param string $value The value to parse and convert to an float.
-	 * @return \Spryker\Decimal\Decimal
+	 * @return \Spryker\DecimalObject\Decimal
 	 */
 	protected function _parseValue($value) {
 		/** @var \Cake\I18n\Number $class */

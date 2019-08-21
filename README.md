@@ -11,7 +11,7 @@ This branch is for use with **CakePHP 3.7+**.
  
 ## Requirements 
 
-- Uses [spryker/decimal](https://github.com/spryker/decimal) and as such requires bcmath extension.
+- Uses [spryker/decimal-object](https://github.com/spryker/decimal-object) and as such requires bcmath extension.
 
 ## Installation
 Require the plugin through Composer:
@@ -59,7 +59,7 @@ protected function _initializeSchema(TableSchema $schema) {
 }
 ```
 
-For details on `Decimal` class, see [Decimal value object documentation](https://github.com/spryker/decimal/tree/master/docs).
+For details on `Decimal` class, see [Decimal value object documentation](https://github.com/spryker/decimal-object/tree/master/docs).
 
 
 ## Configuration
