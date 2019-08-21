@@ -141,7 +141,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * @return void
 	 */
 	public function useAutoTrim($enable = true) {
-		return $this->_autoTrim = $enable;
+		$this->_autoTrim = $enable;
 	}
 
 	/**
