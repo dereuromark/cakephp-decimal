@@ -62,7 +62,7 @@ Type::build('timestamp')
 // Ensure default test connection is defined
 if (!getenv('db_class')) {
 	putenv('db_class=Cake\Database\Driver\Sqlite');
-	putenv('db_dsn=sqlite::memory:');
+	putenv('db_dsn=sqlite:///:memory:');
 }
 
 Cake\Datasource\ConnectionManager::setConfig('test', [
