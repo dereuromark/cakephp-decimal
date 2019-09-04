@@ -21,6 +21,9 @@ matrix:
     - php: 7.2
       env: DB=pgsql db_dsn='postgres://postgres@127.0.0.1/cakephp_test'
 
+    - php: 7.2
+      env: DB=sqlite DB_DSN='sqlite:///:memory:'      
+
     - php: 7.1
       env: PREFER_LOWEST=1
 
