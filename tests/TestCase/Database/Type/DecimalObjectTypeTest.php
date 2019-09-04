@@ -52,7 +52,7 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testSave() {
+	public function testSave(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => '-1.11',
@@ -71,7 +71,7 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testSaveObject() {
+	public function testSaveObject(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => Decimal::create('0.000001'),
@@ -98,7 +98,7 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testMarshalInvalid() {
+	public function testMarshalInvalid(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => 'abc',
@@ -115,7 +115,7 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testMarshalEmptyString() {
+	public function testMarshalEmptyString(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => '',
@@ -128,7 +128,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionDecimal() {
+	public function testPrecisionDecimal(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => '0.000000000000000000000000000001',
@@ -152,7 +152,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionFloat() {
+	public function testPrecisionFloat(): void {
 		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([
@@ -178,7 +178,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionDecimalExtended() {
+	public function testPrecisionDecimalExtended(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => 4 / 3,
@@ -205,7 +205,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionFloatExtended() {
+	public function testPrecisionFloatExtended(): void {
 		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([

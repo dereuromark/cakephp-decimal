@@ -28,9 +28,6 @@ require CORE_PATH . 'config/bootstrap.php';
 
 Configure::write('App', [
 	'namespace' => 'App',
-	'paths' => [
-		'templates' => [APP . 'Template' . DS],
-	],
 ]);
 Configure::write('debug', true);
 $cache = [
