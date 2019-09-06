@@ -57,13 +57,6 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		}
 
 		if (!($value instanceof Decimal)) {
-			if (is_object($value)
-				&& method_exists($value, '__toString')
-				&& is_numeric(strval($value))
-			) {
-				$value = strval($value);
-			}
-
 			$value = Decimal::create($value);
 		}
 

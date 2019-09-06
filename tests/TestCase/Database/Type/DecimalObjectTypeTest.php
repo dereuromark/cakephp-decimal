@@ -2,9 +2,9 @@
 
 namespace CakeDecimal\Test\TestCase\Database\Type;
 
-use Cake\Datasource\ConnectionManager;
 use CakeDecimal\Database\Type\DecimalObjectType;
 use Cake\Database\Type;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Spryker\DecimalObject\Decimal;
@@ -221,7 +221,6 @@ class DecimalObjectTypeTest extends TestCase {
 	 */
 	public function testPrecisionFloatExtended(): void {
 
-
 		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([
@@ -244,7 +243,7 @@ class DecimalObjectTypeTest extends TestCase {
 		}
 
 		// Note the last digit being rounded up
-		if ($this->isConnection('Sqlite')) {
+		if ($this->isConnection('Sqlite') || $this->isConnection('Postgres')) {
 			$this->assertSame(3.6666666666667, $record->amount_nullable);
 			$this->assertSame('3.6666666666667', (string)(4 / 3 + 7 / 3));
 		} else {
@@ -259,8 +258,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 * @param string|null $driver
 	 * @return void
 	 */
-	protected function _needsConnection(?string $driver = null): void
-	{
+	protected function _needsConnection(?string $driver = null): void {
 		if ($driver) {
 			$this->skipIf(!$this->isConnection($driver), 'Not using ' . $driver . ' for test config.');
 
