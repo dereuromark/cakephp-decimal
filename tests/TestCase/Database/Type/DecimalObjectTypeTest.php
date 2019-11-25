@@ -22,7 +22,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 */
 	public $fixtures = [
 		'plugin.CakeDecimal.DecimalTypes',
-		'plugin.CakeDecimal.FloatTypes'
+		'plugin.CakeDecimal.FloatTypes',
 	];
 
 	/**
@@ -96,13 +96,8 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertInstanceOf(Decimal::class, $record->amount_nullable);
 
 		// Now it has the precision/scale of DB
-		if ($this->isConnection('Sqlite')) {
-			$this->assertSame('0.0000010', (string)$record->amount_required);
-			$this->assertSame('-1.11', (string)$record->amount_nullable);
-		} else {
-			$this->assertSame('0.000001', (string)$record->amount_required);
-			$this->assertSame('-1.110000', (string)$record->amount_nullable);
-		}
+		$this->assertSame('0.000001', (string)$record->amount_required);
+		$this->assertSame('-1.11', (string)$record->amount_nullable);
 	}
 
 	/**
@@ -277,6 +272,17 @@ class DecimalObjectTypeTest extends TestCase {
 		$config = ConnectionManager::getConfig('test');
 
 		return strpos($config['driver'], $driver) !== false;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDivide() {
+		$decimalOne = Decimal::create(1);
+		$decimalTwo = Decimal::create(2);
+
+		$decimalThree = $decimalOne->divide($decimalTwo, 10);
+		$this->assertSame('0.5000000000', (string)$decimalThree);
 	}
 
 }

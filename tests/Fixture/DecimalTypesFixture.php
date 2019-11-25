@@ -16,7 +16,7 @@ class DecimalTypesFixture extends TestFixture {
 		'name' => ['type' => 'string', 'null' => true],
 		'amount_required' => ['type' => 'decimal', 'length' => 10, 'precision' => 6, 'null' => false],
 		'amount_nullable' => ['type' => 'decimal', 'length' => 10, 'precision' => 6, 'null' => true],
-		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
 	];
 
 	/**
