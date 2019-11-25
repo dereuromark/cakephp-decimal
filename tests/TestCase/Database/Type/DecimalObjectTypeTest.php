@@ -91,7 +91,7 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertInstanceOf(Decimal::class, $record->amount_nullable);
 
 		// Now it has the precision/scale of DB
-		$this->assertSame('0.0000010', (string)$record->amount_required);
+		$this->assertSame('0.000001', (string)$record->amount_required);
 		$this->assertSame('-1.11', (string)$record->amount_nullable);
 	}
 
@@ -228,6 +228,17 @@ class DecimalObjectTypeTest extends TestCase {
 		// Note the last digit being rounded up
 		$this->assertSame(3.6666666666667, $record->amount_nullable);
 		$this->assertSame('3.6666666666667', (string)(4 / 3 + 7 / 3));
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testDivide() {
+		$decimalOne = Decimal::create(1);
+		$decimalTwo = Decimal::create(2);
+
+		$decimalThree = $decimalOne->divide($decimalTwo, 10);
+		$this->assertSame('0.5000000000', (string)$decimalThree);
 	}
 
 }
