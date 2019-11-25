@@ -16,7 +16,7 @@ class FloatTypesFixture extends TestFixture {
 		'name' => ['type' => 'string', 'null' => true],
 		'amount_required' => ['type' => 'float', 'null' => false],
 		'amount_nullable' => ['type' => 'float', 'null' => true],
-		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]],
 	];
 
 	/**

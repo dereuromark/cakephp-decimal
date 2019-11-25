@@ -21,7 +21,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 */
 	public $fixtures = [
 		'plugin.CakeDecimal.DecimalTypes',
-		'plugin.CakeDecimal.FloatTypes'
+		'plugin.CakeDecimal.FloatTypes',
 	];
 
 	/**
