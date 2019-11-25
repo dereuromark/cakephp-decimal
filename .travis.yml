@@ -3,6 +3,7 @@ language: php
 php:
   - 7.1
   - 7.3
+  - 7.4snapshot
 
 env:
   matrix:
@@ -34,7 +35,7 @@ matrix:
       env: CODECOVERAGE=1 DEFAULT=0 DB=mysql db_dsn='mysql://root@127.0.0.1/cakephp_test'
 
 before_install:
-  - if [[ $CODECOVERAGE != 1 ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ $CODECOVERAGE != 1 && ${TRAVIS_PHP_VERSION} != "7.4snapshot" ]]; then phpenv config-rm xdebug.ini; fi
 
 before_script:
   - if [[ $PREFER_LOWEST != 1 ]]; then composer install --prefer-source --no-interaction ; fi
