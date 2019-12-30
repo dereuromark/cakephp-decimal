@@ -97,7 +97,7 @@ class DecimalObjectTypeTest extends TestCase {
 
 		// Now it has the precision/scale of DB
 		$this->assertSame('0.000001', (string)$record->amount_required);
-		$this->assertSame('-1.11', (string)$record->amount_nullable);
+		$this->assertSame('-1.110000', (string)$record->amount_nullable);
 	}
 
 	/**
