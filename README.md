@@ -40,11 +40,11 @@ Type::map('decimal_object', 'CakeDecimal\Database\Type\DecimalObjectType');
 Then inside your Table classes set them explicitly inside `_initializeSchema()`:
 ```php
 /**
- * @param \Cake\Database\Schema\TableSchema $schema
+ * @param \Cake\Database\Schema\TableSchemaInterface $schema
  *
- * @return \Cake\Database\Schema\TableSchema
+ * @return \Cake\Database\Schema\TableSchemaInterface
  */
-protected function _initializeSchema(TableSchema $schema) {
+protected function _initializeSchema(TableSchemaInterface $schema): TableSchemaInterface {
     $schema->setColumnType('amount', 'decimal_object');
     ...
 
