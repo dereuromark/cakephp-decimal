@@ -23,7 +23,6 @@
 			"TestApp\\": "tests/test_app/src/"
 		}
 	},
-	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"extra": {
 		"branch-alias": {
