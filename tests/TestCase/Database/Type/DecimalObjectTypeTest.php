@@ -95,6 +95,8 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertInstanceOf(Decimal::class, $record->amount_required);
 		$this->assertInstanceOf(Decimal::class, $record->amount_nullable);
 
+		$this->_needsConnection('Mysql');
+
 		// Now it has the precision/scale of DB
 		$this->assertSame('0.000001', (string)$record->amount_required);
 		$this->assertSame('-1.110000', (string)$record->amount_nullable);
