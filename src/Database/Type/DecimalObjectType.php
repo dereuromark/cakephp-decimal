@@ -2,8 +2,8 @@
 
 namespace CakeDecimal\Database\Type;
 
-use Cake\Database\Driver;
-use Cake\Database\Type;
+use Cake\Database\DriverInterface;
+use Cake\Database\Type\BaseType;
 use Cake\Database\Type\BatchCastingInterface;
 use PDO;
 use RuntimeException;
@@ -18,7 +18,7 @@ use Spryker\DecimalObject\Decimal;
  *
  * @link https://github.com/spryker/decimal
  */
-class DecimalObjectType extends Type implements BatchCastingInterface {
+class DecimalObjectType extends BaseType implements BatchCastingInterface {
 
 	/**
 	 * The class to use for representing number objects
@@ -47,14 +47,15 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * Convert integer data into the database format.
 	 *
 	 * @param string|int|float|\Spryker\DecimalObject\Decimal|null $value The value to convert.
-	 * @param \Cake\Database\Driver $driver The driver instance to convert with.
+	 * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
 	 * @return \Spryker\DecimalObject\Decimal|null
 	 * @throws \InvalidArgumentException
 	 */
-	public function toDatabase($value, Driver $driver) {
+	public function toDatabase($value, DriverInterface $driver) {
 		if ($value === null || $value === '') {
 			return null;
 		}
+
 		if (!($value instanceof Decimal)) {
 			$value = Decimal::create($value);
 		}
@@ -66,10 +67,10 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * Convert float values to PHP floats
 	 *
 	 * @param string|int|float|null $value The value to convert.
-	 * @param \Cake\Database\Driver $driver The driver instance to convert with.
+	 * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
 	 * @return \Spryker\DecimalObject\Decimal|null
 	 */
-	public function toPHP($value, Driver $driver) {
+	public function toPHP($value, DriverInterface $driver) {
 		if ($value === null) {
 			return $value;
 		}
@@ -87,7 +88,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 *
 	 * @return array
 	 */
-	public function manyToPHP(array $values, array $fields, Driver $driver) {
+	public function manyToPHP(array $values, array $fields, DriverInterface $driver): array {
 		foreach ($fields as $field) {
 			if (!isset($values[$field])) {
 				continue;
@@ -103,10 +104,10 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * Get the correct PDO binding type for integer data.
 	 *
 	 * @param mixed $value The value being bound.
-	 * @param \Cake\Database\Driver $driver The driver.
+	 * @param \Cake\Database\DriverInterface $driver The driver.
 	 * @return int
 	 */
-	public function toStatement($value, Driver $driver) {
+	public function toStatement($value, DriverInterface $driver): int {
 		return PDO::PARAM_STR;
 	}
 
@@ -140,7 +141,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * @param bool $enable
 	 * @return void
 	 */
-	public function useAutoTrim($enable = true) {
+	public function useAutoTrim(bool $enable = true): void {
 		$this->_autoTrim = $enable;
 	}
 
@@ -152,7 +153,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * @return $this
 	 * @throws \RuntimeException
 	 */
-	public function useLocaleParser($enable = true) {
+	public function useLocaleParser(bool $enable = true) {
 		if ($enable === false) {
 			$this->_useLocaleParser = $enable;
 
@@ -177,7 +178,7 @@ class DecimalObjectType extends Type implements BatchCastingInterface {
 	 * @param string $value The value to parse and convert to an float.
 	 * @return \Spryker\DecimalObject\Decimal
 	 */
-	protected function _parseValue($value) {
+	protected function _parseValue(string $value): Decimal {
 		/** @var \Cake\I18n\Number $class */
 		$class = static::$numberClass;
 

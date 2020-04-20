@@ -4,6 +4,7 @@ namespace CakeDecimal\Test\TestCase\Database\Type;
 
 use CakeDecimal\Database\Type\DecimalObjectType;
 use Cake\Database\Type;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Spryker\DecimalObject\Decimal;
@@ -52,7 +53,7 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testSave() {
+	public function testSave(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => '-1.11',
@@ -65,13 +66,17 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertInstanceOf(Decimal::class, $record->amount_required);
 		$this->assertNull($record->amount_nullable);
 
-		$this->assertSame('-1.11', (string)$record->amount_required);
+		if ($this->isConnection('Sqlite')) {
+			$this->assertSame('-1.11', (string)$record->amount_required);
+		} else {
+			$this->assertSame('-1.110000', (string)$record->amount_required);
+		}
 	}
 
 	/**
 	 * @return void
 	 */
-	public function testSaveObject() {
+	public function testSaveObject(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => Decimal::create('0.000001'),
@@ -90,15 +95,17 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->assertInstanceOf(Decimal::class, $record->amount_required);
 		$this->assertInstanceOf(Decimal::class, $record->amount_nullable);
 
+		$this->_needsConnection('Mysql');
+
 		// Now it has the precision/scale of DB
 		$this->assertSame('0.000001', (string)$record->amount_required);
-		$this->assertSame('-1.11', (string)$record->amount_nullable);
+		$this->assertSame('-1.110000', (string)$record->amount_nullable);
 	}
 
 	/**
 	 * @return void
 	 */
-	public function testMarshalInvalid() {
+	public function testMarshalInvalid(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => 'abc',
@@ -115,7 +122,7 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
-	public function testMarshalEmptyString() {
+	public function testMarshalEmptyString(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => '',
@@ -128,7 +135,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionDecimal() {
+	public function testPrecisionDecimal(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => '0.000000000000000000000000000001',
@@ -152,7 +159,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionFloat() {
+	public function testPrecisionFloat(): void {
 		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([
@@ -178,7 +185,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionDecimalExtended() {
+	public function testPrecisionDecimalExtended(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => 4 / 3,
@@ -194,7 +201,11 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->Table->saveOrFail($record);
 
 		$record = $this->Table->get($record->id);
-		$this->assertSame('3.6666666666666', (string)$record->amount_nullable);
+		if ($this->isConnection('Sqlite')) {
+			$this->assertSame('3.6666666666666', (string)$record->amount_nullable);
+		} else {
+			$this->assertSame('3.666667', (string)$record->amount_nullable);
+		}
 
 		// Directly doing math on the floats reveals the precision issues
 		$this->assertSame('3.6666666666667', (string)Decimal::create(4 / 3 + 7 / 3));
@@ -205,7 +216,8 @@ class DecimalObjectTypeTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testPrecisionFloatExtended() {
+	public function testPrecisionFloatExtended(): void {
+
 		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([
@@ -223,11 +235,45 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->Table->saveOrFail($record);
 
 		$record = $this->Table->get($record->id);
-		$this->assertSame(4 / 3 + 7 / 3, $record->amount_nullable);
+		if ($this->isConnection('Sqlite')) {
+			$this->assertSame(4 / 3 + 7 / 3, $record->amount_nullable);
+		}
 
 		// Note the last digit being rounded up
-		$this->assertSame(3.6666666666667, $record->amount_nullable);
-		$this->assertSame('3.6666666666667', (string)(4 / 3 + 7 / 3));
+		if ($this->isConnection('Sqlite') || $this->isConnection('Postgres')) {
+			$this->assertSame(3.6666666666667, $record->amount_nullable);
+			$this->assertSame('3.6666666666667', (string)(4 / 3 + 7 / 3));
+		} else {
+			$this->assertSame(3.66667, $record->amount_nullable);
+			$this->assertSame('3.6666666666667', (string)(4 / 3 + 7 / 3));
+		}
+	}
+
+	/**
+	 * Helper method for skipping tests that need a real connection.
+	 *
+	 * @param string|null $driver
+	 * @return void
+	 */
+	protected function _needsConnection(?string $driver = null): void {
+		if ($driver) {
+			$this->skipIf(!$this->isConnection($driver), 'Not using ' . $driver . ' for test config.');
+
+			return;
+		}
+
+		$this->skipIf($this->isConnection('SqLite'), 'Tests do not work with Sqlite.');
+	}
+
+	/**
+	 * @param string $driver
+	 *
+	 * @return bool
+	 */
+	protected function isConnection(string $driver): bool {
+		$config = ConnectionManager::getConfig('test');
+
+		return strpos($config['driver'], $driver) !== false;
 	}
 
 	/**
