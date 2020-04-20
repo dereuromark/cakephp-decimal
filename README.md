@@ -7,7 +7,7 @@
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg)](https://php.net/)
 
 This is an alternative to
- * the core one (using string)
+ * the core Decimal type (using plain strings)
 
 As value object you have a few advantages, especially on handling the values inside your business logic.
 
