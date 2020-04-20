@@ -7,8 +7,7 @@
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg)](https://php.net/)
 
 This is an alternative to
- * the core one (using float in 3.x and string in 4.x)
- * and Shim plugin (using string in 3.x just like 4.x will).
+ * the core one (using string)
 
 As value object you have a few advantages, especially on handling the values inside your business logic.
 
