@@ -2,11 +2,11 @@
 
 namespace CakeDecimal\Test\TestCase\Database\Type;
 
-use CakeDecimal\Database\Type\DecimalObjectType;
 use Cake\Database\Type;
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use CakeDecimal\Database\Type\DecimalObjectType;
 use Spryker\DecimalObject\Decimal;
 use TestApp\Model\Table\DecimalTypesTable;
 use TestApp\Model\Table\FloatTypesTable;

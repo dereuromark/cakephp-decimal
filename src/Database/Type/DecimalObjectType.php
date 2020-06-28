@@ -48,8 +48,8 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	 *
 	 * @param string|int|float|\Spryker\DecimalObject\Decimal|null $value The value to convert.
 	 * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
-	 * @return \Spryker\DecimalObject\Decimal|null
 	 * @throws \InvalidArgumentException
+	 * @return \Spryker\DecimalObject\Decimal|null
 	 */
 	public function toDatabase($value, DriverInterface $driver) {
 		if ($value === null || $value === '') {
@@ -150,8 +150,8 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	 * by using a locale aware parser.
 	 *
 	 * @param bool $enable Whether or not to enable
-	 * @return $this
 	 * @throws \RuntimeException
+	 * @return $this
 	 */
 	public function useLocaleParser(bool $enable = true) {
 		if ($enable === false) {
@@ -166,6 +166,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 
 			return $this;
 		}
+
 		throw new RuntimeException(
 			sprintf('Cannot use locale parsing with the %s class', static::$numberClass)
 		);

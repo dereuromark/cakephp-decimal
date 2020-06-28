@@ -1,4 +1,5 @@
 <?php
+
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Database\Type;
