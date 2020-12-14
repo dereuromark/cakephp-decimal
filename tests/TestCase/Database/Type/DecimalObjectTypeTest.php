@@ -2,8 +2,10 @@
 
 namespace CakeDecimal\Test\TestCase\Database\Type;
 
+use Cake\Database\DriverInterface;
 use Cake\Database\Type;
 use Cake\Datasource\ConnectionManager;
+use Cake\I18n\I18n;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use CakeDecimal\Database\Type\DecimalObjectType;
@@ -247,6 +249,57 @@ class DecimalObjectTypeTest extends TestCase {
 			$this->assertSame(3.66667, $record->amount_nullable);
 			$this->assertSame('3.6666666666667', (string)(4 / 3 + 7 / 3));
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testAutoTrim(): void {
+		$type = new DecimalObjectType();
+		$type->useAutoTrim();
+
+		$value = '12.121000';
+		$driver = $this->getMockBuilder(DriverInterface::class)->getMock();
+		$result = $type->toPHP($value, $driver);
+
+		$this->assertSame('12.121', (string)$result);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testUseLocalParser(): void {
+		$type = new DecimalObjectType();
+		$type->useLocaleParser();
+
+		$locale = I18n::getLocale();
+		I18n::setLocale('de_DE');
+		$value = '12,1210';
+		$result = $type->marshal($value);
+		I18n::setLocale($locale);
+
+		$this->assertSame('12.121', (string)$result);
+	}
+	/**
+	 * @return void
+	 */
+	public function testManyToPHP(): void {
+		$type = new DecimalObjectType();
+		$driver = $this->getMockBuilder(DriverInterface::class)->getMock();
+
+		$values = [
+			'x' => 1.1,
+			'y' => '2',
+		];
+		$fields = [
+			'x',
+			'y',
+		];
+		$result = $type->manyToPHP($values, $fields, $driver);
+
+		$this->assertCount(2, $result);
+		$this->assertSame('1.1', (string)$result['x']);
+		$this->assertSame('2', (string)$result['y']);
 	}
 
 	/**
