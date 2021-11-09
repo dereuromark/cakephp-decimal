@@ -51,14 +51,10 @@ $cache = [
 	],
 ];
 Cache::setConfig($cache);
-Type::build('time')
-	->useImmutable();
-Type::build('date')
-	->useImmutable();
-Type::build('datetime')
-	->useImmutable();
-Type::build('timestamp')
-	->useImmutable();
+Type::build('time');
+Type::build('date');
+Type::build('datetime');
+Type::build('timestamp');
 
 // Ensure default test connection is defined
 if (!getenv('db_dsn')) {

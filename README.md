@@ -4,14 +4,14 @@
 [![Latest Stable Version](https://poser.pugx.org/dereuromark/cakephp-decimal/v/stable.svg)](https://packagist.org/packages/dereuromark/cakephp-decimal)
 [![codecov](https://codecov.io/gh/dereuromark/cakephp-decimal/branch/master/graph/badge.svg)](https://codecov.io/gh/dereuromark/cakephp-decimal)
 [![License](https://poser.pugx.org/dereuromark/cakephp-decimal/license)](https://packagist.org/packages/dereuromark/cakephp-decimal)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.2-8892BF.svg)](https://php.net/)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg)](https://php.net/)
 
 This is an alternative to
  * the core Decimal type (using plain strings)
 
 As value object you have a few advantages, especially on handling the values inside your business logic.
 
-This branch is for use with **CakePHP 4.0+**. See [version map](https://github.com/dereuromark/cakephp-decimal/wiki#cakephp-version-map) for details.
+This branch is for use with **CakePHP 4.2+**. See [version map](https://github.com/dereuromark/cakephp-decimal/wiki#cakephp-version-map) for details.
 
 ## Requirements
 

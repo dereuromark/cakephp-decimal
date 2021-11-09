@@ -46,7 +46,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	/**
 	 * Convert integer data into the database format.
 	 *
-	 * @param string|int|float|\Spryker\DecimalObject\Decimal|null $value The value to convert.
+	 * @param \Spryker\DecimalObject\Decimal|string|float|int|null $value The value to convert.
 	 * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
 	 * @throws \InvalidArgumentException
 	 * @return \Spryker\DecimalObject\Decimal|null
@@ -66,7 +66,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	/**
 	 * Convert float values to PHP floats
 	 *
-	 * @param string|int|float|null $value The value to convert.
+	 * @param string|float|int|null $value The value to convert.
 	 * @param \Cake\Database\DriverInterface $driver The driver instance to convert with.
 	 * @return \Spryker\DecimalObject\Decimal|null
 	 */
@@ -168,7 +168,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		}
 
 		throw new RuntimeException(
-			sprintf('Cannot use locale parsing with the %s class', static::$numberClass)
+			sprintf('Cannot use locale parsing with the %s class', static::$numberClass),
 		);
 	}
 
