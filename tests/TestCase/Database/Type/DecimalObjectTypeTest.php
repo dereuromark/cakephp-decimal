@@ -238,7 +238,7 @@ class DecimalObjectTypeTest extends TestCase {
 
 		$record = $this->Table->get($record->id);
 		if ($this->isConnection('Sqlite')) {
-			$this->assertSame(4 / 3 + 7 / 3, $record->amount_nullable);
+			$this->assertEquals(4 / 3 + 7 / 3, $record->amount_nullable);
 		}
 
 		// Note the last digit being rounded up
