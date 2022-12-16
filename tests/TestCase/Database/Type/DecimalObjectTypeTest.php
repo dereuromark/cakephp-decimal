@@ -237,9 +237,6 @@ class DecimalObjectTypeTest extends TestCase {
 		$this->Table->saveOrFail($record);
 
 		$record = $this->Table->get($record->id);
-		if ($this->isConnection('Sqlite')) {
-			$this->assertEquals(4 / 3 + 7 / 3, $record->amount_nullable);
-		}
 
 		// Note the last digit being rounded up
 		if ($this->isConnection('Sqlite') || $this->isConnection('Postgres')) {
