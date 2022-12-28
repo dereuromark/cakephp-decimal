@@ -20,9 +20,9 @@ use TestApp\Model\Table\FloatTypesTable;
 class DecimalObjectTypeTest extends TestCase {
 
 	/**
-	 * @var array
+	 * @var array<string>
 	 */
-	public $fixtures = [
+	protected $fixtures = [
 		'plugin.CakeDecimal.DecimalTypes',
 		'plugin.CakeDecimal.FloatTypes',
 	];
