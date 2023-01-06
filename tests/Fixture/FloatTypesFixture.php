@@ -11,7 +11,7 @@ class FloatTypesFixture extends TestFixture {
 	 *
 	 * @var array
 	 */
-	public $fields = [
+	public array $fields = [
 		'id' => ['type' => 'integer'],
 		'name' => ['type' => 'string', 'null' => true],
 		'amount_required' => ['type' => 'float', 'null' => false],
@@ -24,7 +24,7 @@ class FloatTypesFixture extends TestFixture {
 	 *
 	 * @var array
 	 */
-	public $records = [
+	public array $records = [
 		[
 			'name' => 'Something',
 			'amount_required' => 20.123,

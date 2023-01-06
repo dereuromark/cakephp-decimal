@@ -2,8 +2,8 @@
 
 namespace CakeDecimal\Test\TestCase\Database\Type;
 
-use Cake\Database\DriverInterface;
-use Cake\Database\Type;
+use Cake\Database\Driver;
+use Cake\Database\TypeFactory;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\I18n;
 use Cake\ORM\TableRegistry;
@@ -22,7 +22,7 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @var array<string>
 	 */
-	protected $fixtures = [
+	protected array $fixtures = [
 		'plugin.CakeDecimal.DecimalTypes',
 		'plugin.CakeDecimal.FloatTypes',
 	];
@@ -38,9 +38,9 @@ class DecimalObjectTypeTest extends TestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		Type::map('decimal', DecimalObjectType::class);
+		TypeFactory::map('decimal', DecimalObjectType::class);
 
-		$this->Table = TableRegistry::get('DecimalTypes', ['className' => DecimalTypesTable::class]);
+		$this->Table = TableRegistry::getTableLocator()->get('DecimalTypes', ['className' => DecimalTypesTable::class]);
 	}
 
 	/**
@@ -162,7 +162,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 * @return void
 	 */
 	public function testPrecisionFloat(): void {
-		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
+		$this->Table = TableRegistry::getTableLocator()->get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
@@ -220,7 +220,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 */
 	public function testPrecisionFloatExtended(): void {
 
-		$this->Table = TableRegistry::get('FloatTypes', ['className' => FloatTypesTable::class]);
+		$this->Table = TableRegistry::getTableLocator()->get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
@@ -256,7 +256,7 @@ class DecimalObjectTypeTest extends TestCase {
 		$type->useAutoTrim();
 
 		$value = '12.121000';
-		$driver = $this->getMockBuilder(DriverInterface::class)->getMock();
+		$driver = $this->getMockBuilder(Driver::class)->getMock();
 		$result = $type->toPHP($value, $driver);
 
 		$this->assertSame('12.121', (string)$result);
@@ -282,7 +282,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 */
 	public function testManyToPHP(): void {
 		$type = new DecimalObjectType();
-		$driver = $this->getMockBuilder(DriverInterface::class)->getMock();
+		$driver = $this->getMockBuilder(Driver::class)->getMock();
 
 		$values = [
 			'x' => 1.1,
