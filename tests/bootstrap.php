@@ -3,6 +3,7 @@
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Database\Type;
+use Cake\Datasource\ConnectionManager;
 
 if (!defined('DS')) {
 	define('DS', DIRECTORY_SEPARATOR);
@@ -61,7 +62,7 @@ if (!getenv('db_dsn')) {
 	putenv('db_dsn=sqlite:///:memory:');
 }
 
-Cake\Datasource\ConnectionManager::setConfig('test', [
+ConnectionManager::setConfig('test', [
 	'url' => getenv('db_dsn'),
 	'database' => getenv('db_database'),
 	'username' => getenv('db_username'),
@@ -70,7 +71,7 @@ Cake\Datasource\ConnectionManager::setConfig('test', [
 	'quoteIdentifiers' => true,
 	'cacheMetadata' => true,
 ]);
-Cake\Datasource\ConnectionManager::setConfig('test_database_log', [
+ConnectionManager::setConfig('test_database_log', [
 	'url' => getenv('db_dsn'),
 	'database' => getenv('db_database'),
 	'username' => getenv('db_username'),
