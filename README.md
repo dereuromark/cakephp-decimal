@@ -15,7 +15,7 @@ This branch is for use with **CakePHP 5.0+**. See [version map](https://github.c
 
 ## Requirements
 
-- Uses [spryker/decimal-object](https://github.com/spryker/decimal-object) and as such requires bcmath extension.
+- Uses [php-collective/decimal-object](https://github.com/php-collective/decimal-object) and as such requires bcmath extension.
 
 ## Installation
 Require the plugin through Composer:
@@ -57,7 +57,7 @@ public function getSchema(): TableSchemaInterface {
 }
 ```
 
-For details on `Decimal` class, see [Decimal value object documentation](https://github.com/spryker/decimal-object/tree/master/docs).
+For details on `Decimal` class, see [Decimal value object documentation](https://github.com/php-collective/decimal-object/tree/master/docs).
 
 
 ## Configuration
