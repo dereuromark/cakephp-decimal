@@ -9,7 +9,7 @@ use Cake\I18n\I18n;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use CakeDecimal\Database\Type\DecimalObjectType;
-use Spryker\DecimalObject\Decimal;
+use PhpCollective\DecimalObject\Decimal;
 use TestApp\Model\Table\DecimalTypesTable;
 use TestApp\Model\Table\FloatTypesTable;
 
@@ -145,7 +145,7 @@ class DecimalObjectTypeTest extends TestCase {
 		]);
 		$this->Table->saveOrFail($record);
 
-		/** @var \Spryker\DecimalObject\Decimal $decimal */
+		/** @var \PhpCollective\DecimalObject\Decimal $decimal */
 		$decimal = $record->amount_nullable;
 		$newDecimal = $decimal->subtract($record->amount_required)->subtract($record->amount_required);
 		$record->amount_nullable = $newDecimal;
@@ -195,7 +195,7 @@ class DecimalObjectTypeTest extends TestCase {
 		]);
 		$this->Table->saveOrFail($record);
 
-		/** @var \Spryker\DecimalObject\Decimal $decimal */
+		/** @var \PhpCollective\DecimalObject\Decimal $decimal */
 		$decimal = $record->amount_nullable;
 		$newDecimal = $record->amount_required->add($record->amount_nullable);
 		$record->amount_nullable = $newDecimal;
