@@ -1,6 +1,6 @@
 # CakePHP Decimal Plugin
 
-[![CI](https://github.com/dereuromark/cakephp-decimal/workflows/CI/badge.svg?branch=master)](https://travis-ci.org/dereuromark/cakephp-decimal)
+[![CI](https://github.com/dereuromark/cakephp-decimal/actions/workflows/ci.yml/badge.svg?branch=master)](https://travis-ci.org/dereuromark/cakephp-decimal)
 [![Latest Stable Version](https://poser.pugx.org/dereuromark/cakephp-decimal/v/stable.svg)](https://packagist.org/packages/dereuromark/cakephp-decimal)
 [![codecov](https://codecov.io/gh/dereuromark/cakephp-decimal/branch/master/graph/badge.svg)](https://codecov.io/gh/dereuromark/cakephp-decimal)
 [![License](https://poser.pugx.org/dereuromark/cakephp-decimal/license)](https://packagist.org/packages/dereuromark/cakephp-decimal)
