@@ -59,12 +59,12 @@ TypeFactory::build('datetime');
 TypeFactory::build('timestamp');
 
 // Ensure default test connection is defined
-if (!getenv('db_dsn')) {
+if (!getenv('DB_URL')) {
 	putenv('db_dsn=sqlite:///:memory:');
 }
 
 ConnectionManager::setConfig('test', [
-	'url' => getenv('db_dsn'),
+	'url' => getenv('DB_URL'),
 	'database' => getenv('db_database'),
 	'username' => getenv('db_username'),
 	'password' => getenv('db_password'),
@@ -73,7 +73,7 @@ ConnectionManager::setConfig('test', [
 	'cacheMetadata' => true,
 ]);
 ConnectionManager::setConfig('test_database_log', [
-	'url' => getenv('db_dsn'),
+	'url' => getenv('DB_URL'),
 	'database' => getenv('db_database'),
 	'username' => getenv('db_username'),
 	'password' => getenv('db_password'),
