@@ -58,3 +58,32 @@ To enable localization parsing:
 
 You can extend the value object and use the same config as shown above to enable your custom Decimal VO extension class.
 Your extension can be more strict or less strict.
+
+## Templating
+When using PHP templating and NumberHelper methods, it can make sense to extend them locally for better usability.
+```php
+namespace App\View\Helper;
+
+use Cake\View\Helper\NumberHelper as CoreNumberHelper;
+use PhpCollective\DecimalObject\Decimal;
+
+class NumberHelper extends CoreNumberHelper
+{
+    /**
+     * @param \PhpCollective\DecimalObject\Decimal|string|float|int $number
+     * @param array<string, mixed> $options
+     *
+     * @return string Formatted number
+     */
+    public function format(Decimal|string|float|int $number, array $options = []): string
+    {
+        if ($number instanceof Decimal) {
+            $options += ['places' => $number->scale()];
+            $number = (string)$number;
+        }
+
+        return parent::format($number, $options);
+    }
+}
+```
+Pro-tip: The display of the places/precision is now also more correct compared to the default casting to float.
