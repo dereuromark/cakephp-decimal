@@ -67,16 +67,15 @@ namespace App\View\Helper;
 use Cake\View\Helper\NumberHelper as CoreNumberHelper;
 use PhpCollective\DecimalObject\Decimal;
 
-class NumberHelper extends CoreNumberHelper
-{
+class NumberHelper extends CoreNumberHelper {
+
     /**
      * @param \PhpCollective\DecimalObject\Decimal|string|float|int $number
      * @param array<string, mixed> $options
      *
      * @return string Formatted number
      */
-    public function format(Decimal|string|float|int $number, array $options = []): string
-    {
+    public function format(Decimal|string|float|int $number, array $options = []): string {
         if ($number instanceof Decimal) {
             $options += ['places' => $number->scale()];
             $number = (string)$number;
@@ -84,6 +83,7 @@ class NumberHelper extends CoreNumberHelper
 
         return parent::format($number, $options);
     }
+
 }
 ```
 Pro-tip: The display of the places/precision is now also more correct compared to the default casting to float.
