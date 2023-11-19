@@ -87,6 +87,12 @@ use Spryker\DecimalObject\Decimal;
 
 class NumberHelper extends CoreNumberHelper
 {
+    /**
+     * @param \Spryker\DecimalObject\Decimal|string|float|int $number
+     * @param array<string, mixed> $options
+     *
+     * @return string Formatted number
+     */
     public function format($number, array $options = []): string
     {
         if ($number instanceof Decimal) {
@@ -96,5 +102,6 @@ class NumberHelper extends CoreNumberHelper
 
         return parent::format($number, $options);
     }
+}
 ```
 Pro-tip: The display of the places/precision is now also more correct compared to the default casting to float.
