@@ -1,6 +1,6 @@
 # CakePHP Decimal Plugin
 
-[![CI](https://github.com/dereuromark/cakephp-decimal/actions/workflows/ci.yml/badge.svg?branch=master)](https://travis-ci.org/dereuromark/cakephp-decimal)
+[![CI](https://github.com/dereuromark/cakephp-decimal/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/dereuromark/cakephp-decimal/actions/workflows/ci.yml?query=branch%3Amaster)
 [![Latest Stable Version](https://poser.pugx.org/dereuromark/cakephp-decimal/v/stable.svg)](https://packagist.org/packages/dereuromark/cakephp-decimal)
 [![codecov](https://codecov.io/gh/dereuromark/cakephp-decimal/branch/master/graph/badge.svg)](https://codecov.io/gh/dereuromark/cakephp-decimal)
 [![License](https://poser.pugx.org/dereuromark/cakephp-decimal/license)](https://packagist.org/packages/dereuromark/cakephp-decimal)
@@ -75,3 +75,26 @@ Type::build('decimal')
 
 You can extend the value object and use the same config as shown above to enable your custom Decimal VO extension class.
 Your extension can be more strict or less strict.
+
+
+## Templating
+When using PHP templating and NumberHelper methods, it can make sense to extend them locally for better usability.
+```php
+namespace App\View\Helper;
+
+use Cake\View\Helper\NumberHelper as CoreNumberHelper;
+use Spryker\DecimalObject\Decimal;
+
+class NumberHelper extends CoreNumberHelper
+{
+    public function format($number, array $options = []): string
+    {
+        if ($number instanceof Decimal) {
+            $options += ['places' => $number->scale()];
+            $number = (string)$number;
+        }
+
+        return parent::format($number, $options);
+    }
+```
+Pro-tip: The display of the places/precision is now also more correct compared to the default casting to float.
