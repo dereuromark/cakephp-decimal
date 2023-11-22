@@ -60,8 +60,7 @@ class NumberHelper extends CoreNumberHelper {
 	 *
 	 * @return string Human readable size
 	 */
-	public function precision(Decimal|string|float|int $value, int $precision = 3, array $options = []): string
-	{
+	public function precision(Decimal|string|float|int $value, int $precision = 3, array $options = []): string {
 		if ($value instanceof Decimal) {
 			$options += ['places' => $value->scale()];
 			$value = (string)$value;
