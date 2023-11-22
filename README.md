@@ -11,7 +11,7 @@ This is an alternative to
 
 As value object you have a few advantages, especially on handling the values inside your business logic.
 
-This branch is for use with **CakePHP 4.2+**. See [version map](https://github.com/dereuromark/cakephp-decimal/wiki#cakephp-version-map) for details.
+This branch is for use with **CakePHP 4.4+**. See [version map](https://github.com/dereuromark/cakephp-decimal/wiki#cakephp-version-map) for details.
 
 ## Requirements
 
