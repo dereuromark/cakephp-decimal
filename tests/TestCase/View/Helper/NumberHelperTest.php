@@ -42,13 +42,15 @@ class NumberHelperTest extends TestCase {
 	}
 
 	/**
+	 * On some systems there is a whitespace between the symbol and the value.
+	 *
 	 * @return void
 	 */
 	public function testCurrency(): void {
 		$string = '12.13';
 
 		$result = $this->Number->currency(Decimal::create($string));
-		$this->assertMatchesRegularExpression('#\$\s*' . $string . '#', $result);
+		$this->assertMatchesRegularExpression('#\\$\s*' . $string . '#', $result);
 
 		$result = $this->Number->currency(Decimal::create($string), 'EUR');
 		$this->assertMatchesRegularExpression('#€\s*' . $string . '#', $result);
