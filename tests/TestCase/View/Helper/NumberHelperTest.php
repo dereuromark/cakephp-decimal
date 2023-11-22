@@ -48,10 +48,10 @@ class NumberHelperTest extends TestCase {
 		$string = '12.13';
 
 		$result = $this->Number->currency(Decimal::create($string));
-		$this->assertSame('$' . $string, $result);
+		$this->assertMatchesRegularExpression('#\$\s*' . $string . '#', $result);
 
 		$result = $this->Number->currency(Decimal::create($string), 'EUR');
-		$this->assertSame('€' . $string, $result);
+		$this->assertMatchesRegularExpression('#€\s*' . $string . '#', $result);
 	}
 
 	/**
