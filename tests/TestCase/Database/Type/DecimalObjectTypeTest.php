@@ -3,13 +3,13 @@
 namespace CakeDecimal\Test\TestCase\Database\Type;
 
 use Cake\Database\DriverInterface;
-use Cake\Database\Type;
+use Cake\Database\TypeFactory;
 use Cake\Datasource\ConnectionManager;
 use Cake\I18n\I18n;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use CakeDecimal\Database\Type\DecimalObjectType;
-use Spryker\DecimalObject\Decimal;
+use PhpCollective\DecimalObject\Decimal;
 use TestApp\Model\Table\DecimalTypesTable;
 use TestApp\Model\Table\FloatTypesTable;
 
@@ -38,7 +38,7 @@ class DecimalObjectTypeTest extends TestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		Type::map('decimal', DecimalObjectType::class);
+		TypeFactory::map('decimal', DecimalObjectType::class);
 
 		$this->Table = TableRegistry::get('DecimalTypes', ['className' => DecimalTypesTable::class]);
 	}
@@ -145,7 +145,7 @@ class DecimalObjectTypeTest extends TestCase {
 		]);
 		$this->Table->saveOrFail($record);
 
-		/** @var \Spryker\DecimalObject\Decimal $decimal */
+		/** @var \PhpCollective\DecimalObject\Decimal $decimal */
 		$decimal = $record->amount_nullable;
 		$newDecimal = $decimal->subtract($record->amount_required)->subtract($record->amount_required);
 		$record->amount_nullable = $newDecimal;
@@ -195,9 +195,9 @@ class DecimalObjectTypeTest extends TestCase {
 		]);
 		$this->Table->saveOrFail($record);
 
-		/** @var \Spryker\DecimalObject\Decimal $decimal */
+		/** @var \PhpCollective\DecimalObject\Decimal $decimal */
 		$decimal = $record->amount_nullable;
-		$newDecimal = $record->amount_required->add($record->amount_nullable);
+		$newDecimal = $record->amount_required->add($decimal);
 		$record->amount_nullable = $newDecimal;
 
 		$this->Table->saveOrFail($record);
