@@ -2,7 +2,7 @@
 
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
-use Cake\Database\Type;
+use Cake\Database\TypeFactory;
 use Cake\Datasource\ConnectionManager;
 
 if (!defined('DS')) {
@@ -52,10 +52,10 @@ $cache = [
 	],
 ];
 Cache::setConfig($cache);
-Type::build('time');
-Type::build('date');
-Type::build('datetime');
-Type::build('timestamp');
+TypeFactory::build('time');
+TypeFactory::build('date');
+TypeFactory::build('datetime');
+TypeFactory::build('timestamp');
 
 // Ensure default test connection is defined
 if (!getenv('db_dsn')) {
