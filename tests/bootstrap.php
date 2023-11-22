@@ -31,6 +31,7 @@ require CAKE . 'functions.php';
 
 Configure::write('App', [
 	'namespace' => 'App',
+	'encoding' => 'UTF-8',
 ]);
 Configure::write('debug', true);
 $cache = [

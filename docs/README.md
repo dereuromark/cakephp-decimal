@@ -60,7 +60,14 @@ You can extend the value object and use the same config as shown above to enable
 Your extension can be more strict or less strict.
 
 ## Templating
-When using PHP templating and NumberHelper methods, it can make sense to extend them locally for better usability.
+When using PHP templating and NumberHelper methods, you can use the extended NumberHelper that ships with this plugin.
+```php
+// in your AppView.php
+$this->addHelper('CakeDecimal.Number');
+```
+This will replace the built-in core one.
+
+If you only need a subset or want to further customize, it can make sense to extend the methods locally as helper:
 ```php
 namespace App\View\Helper;
 
@@ -84,6 +91,10 @@ class NumberHelper extends CoreNumberHelper {
         return parent::format($number, $options);
     }
 
+    ...
+
 }
 ```
+
 Pro-tip: The display of the places/precision is now also more correct compared to the default casting to float.
+This is due to the Decimal value object storing the DB fields' scale internally up until string conversion on output.
