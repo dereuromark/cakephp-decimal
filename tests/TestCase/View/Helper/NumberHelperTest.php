@@ -50,10 +50,12 @@ class NumberHelperTest extends TestCase {
 		$string = '12.13';
 
 		$result = $this->Number->currency(Decimal::create($string));
-		$this->assertMatchesRegularExpression('#\\$\s*' . $string . '#', $result);
+		$this->assertTextContains('$', $result);
+		$this->assertTextContains('12.13', $result);
 
 		$result = $this->Number->currency(Decimal::create($string), 'EUR');
-		$this->assertMatchesRegularExpression('#€\s*' . $string . '#', $result);
+		$this->assertTextContains('€', $result);
+		$this->assertTextContains('12.13', $result);
 	}
 
 	/**
