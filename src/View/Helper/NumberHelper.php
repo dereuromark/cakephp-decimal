@@ -23,7 +23,7 @@ class NumberHelper extends CoreNumberHelper {
 	}
 
 	/**
-	 * @param \PhpCollective\DecimalObject\Decimal|string|float $number Value to format.
+	 * @param \PhpCollective\DecimalObject\Decimal|string|float|int $number Value to format.
 	 * @param string|null $currency International currency name such as 'USD', 'EUR', 'JPY', 'CAD'
 	 * @param array<string, mixed> $options Options list.
 	 *
@@ -39,7 +39,7 @@ class NumberHelper extends CoreNumberHelper {
 	}
 
 	/**
-	 * @param \PhpCollective\DecimalObject\Decimal|string|float $value A floating point number
+	 * @param \PhpCollective\DecimalObject\Decimal|string|float|int $value A floating point number
 	 * @param array<string, mixed> $options Options list.
 	 *
 	 * @return string formatted delta
