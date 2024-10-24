@@ -116,8 +116,8 @@ See the trait for all available methods.
 Pro-tip: The display of the places/precision is now also more correct compared to the default casting to float.
 This is due to the Decimal value object storing the DB fields' scale internally up until string conversion on output.
 
-### IdeHelper compatibility
-For IdeHelper to fix up the `string` annotation to `\PhpCollective\DecimalObject\Decimal`, you should modify the `typeMap` in your `app.php` config:
+## IdeHelper compatibility
+For [IdeHelper plugin](https://github.com/dereuromark/cakephp-ide-helper) to automatically fix up the existing "decimal" `string` annotations to `\PhpCollective\DecimalObject\Decimal`, you should modify the `typeMap` in your `app.php` config:
 ```php
     'IdeHelper' => [
         ...
