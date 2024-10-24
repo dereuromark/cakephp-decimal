@@ -126,7 +126,7 @@ For [IdeHelper plugin](https://github.com/dereuromark/cakephp-ide-helper) to aut
     'IdeHelper' => [
         ...
         'typeMap' => [
-            'decimal' => '\PhpCollective\DecimalObject\Decimal',
+            'decimal' => 'PhpCollective\DecimalObject\Decimal',
         ],
     ],
 ```
