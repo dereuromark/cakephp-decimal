@@ -133,6 +133,7 @@ For [IdeHelper plugin](https://github.com/dereuromark/cakephp-ide-helper) to aut
 
 ## Tips
 
+### Object creation
 When creating objects on the fly within your code, it can be useful to have certain default lengths across your application as constants:
 ```php
 $total = Decimal::create(ZERO_WITH_DEFAULT_PRECISION);
@@ -143,3 +144,45 @@ In your `config/bootstrap.php` file you can define them:
 ```php
 define('ZERO_WITH_DEFAULT_PRECISION', '0.00');
 ```
+
+### Validation
+Usually you do not change any validation as all incoming values are not yet objects. They become VO in the patching process and will be such after validation and before saving.
+In rare cases where you need to patch in the objects, you can cast the values beforehand:
+```php
+    $data['total'] = (string)$$total;
+    $data['discount'] = (string)$discount;
+    $order = $ordersTable->patchEntity($order, $data);
+```
+
+If you really need to account for this more globally, you can modify the validation methods:
+```php
+// src/Validation/Validation.php
+namespace App\Validation;
+
+use Cake\Validation\Validation as CoreValidation;
+use PhpCollective\DecimalObject\Decimal;
+
+class Validation extends CoreValidation {
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function decimal(mixed $check, int|bool|null $places = null, ?string $regex = null): bool {
+		if ($check instanceof Decimal) {
+			$check = (string)$check;
+		}
+
+		return parent::decimal($check, $places, $regex);
+	}
+
+	...
+
+}
+```
+
+and
+```php
+// in your bootstrap
+\Cake\Validation\Validator::addDefaultProvider('default', new \Cake\Validation\RulesProvider(\App\Validation\Validation::class));
+```
+
