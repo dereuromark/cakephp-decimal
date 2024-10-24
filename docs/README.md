@@ -126,3 +126,16 @@ For [IdeHelper plugin](https://github.com/dereuromark/cakephp-ide-helper) to aut
         ],
     ],
 ```
+
+## Tips
+
+When creating objects on the fly within your code, it can be useful to have certain default lengths across your application as constants:
+```php
+$total = Decimal::create(ZERO_WITH_DEFAULT_PRECISION);
+...
+```
+
+In your `config/constants.php` file you can define them:
+```php
+define('ZERO_WITH_DEFAULT_PRECISION', '0.00');
+```
