@@ -75,8 +75,8 @@ If you already have a local helper, you can use the trait to add them on top:
 ```php
 namespace App\View\Helper;
 
-use CakeDecimal\View\Helper\NumberHelperTrait;
 use Cake\View\Helper\NumberHelper as CoreNumberHelper;
+use CakeDecimal\View\Helper\NumberHelperTrait;
 
 class NumberHelper extends CoreNumberHelper {
 
