@@ -2,7 +2,11 @@
 
 ## Setup
 
-To enable this for all your decimal columns, use this in bootstrap:
+To enable this for all your decimal columns, just make sure the plugin is loaded incl bootstrap.
+All `decimal` columns should already map to the object now.
+
+### Manual configuration
+If you prefer to do this manually, load the plugin without bootstrap and use this in your app bootstrap:
 ```php
 \Cake\Database\TypeFactory::map(
     'decimal',
@@ -135,7 +139,7 @@ $total = Decimal::create(ZERO_WITH_DEFAULT_PRECISION);
 ...
 ```
 
-In your `config/constants.php` file you can define them:
+In your `config/bootstrap.php` file you can define them:
 ```php
 define('ZERO_WITH_DEFAULT_PRECISION', '0.00');
 ```
