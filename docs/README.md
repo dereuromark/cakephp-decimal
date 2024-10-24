@@ -67,7 +67,23 @@ $this->addHelper('CakeDecimal.Number');
 ```
 This will replace the built-in core one.
 
-If you only need a subset or want to further customize, it can make sense to extend the methods locally as helper:
+If you already have a local helper, you can use the trait to add them on top:
+```php
+namespace App\View\Helper;
+
+use CakeDecimal\View\Helper\NumberHelperTrait;
+use Cake\View\Helper\NumberHelper as CoreNumberHelper;
+
+class NumberHelper extends CoreNumberHelper {
+
+	use NumberHelperTrait;
+
+	... // other methods or replacement of trait methods
+
+}
+```
+
+If you only need a subset or want to further customize, it can make sense to define the methods locally:
 ```php
 namespace App\View\Helper;
 
@@ -95,6 +111,7 @@ class NumberHelper extends CoreNumberHelper {
 
 }
 ```
+See the trait for all available methods.
 
 Pro-tip: The display of the places/precision is now also more correct compared to the default casting to float.
 This is due to the Decimal value object storing the DB fields' scale internally up until string conversion on output.
