@@ -39,7 +39,7 @@ public function getSchema(): TableSchemaInterface {
 ```
 
 ## Usage
-For details on `Decimal` class, see [Decimal value object documentation](https://github.com/php-collective/decimal-object/tree/master/docs).
+For details on `Decimal` (value object) class, see [Decimal value object documentation](https://github.com/php-collective/decimal-object/tree/master/docs).
 
 
 ## Configuration
