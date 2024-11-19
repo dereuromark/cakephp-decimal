@@ -24,17 +24,13 @@ If you just want to map certain fields, you need to use an alias for those.
     'CakeDecimal\Database\Type\DecimalObjectType',
 );
  ```
-Then inside your Table classes set them explicitly inside `getSchema()`:
+Then inside your Table classes set them explicitly inside `initialize()`:
 ```php
-/**
- * @return \Cake\Database\Schema\TableSchemaInterface
- */
-public function getSchema(): TableSchemaInterface {
-    $schema = parent::getSchema();
-    $schema->setColumnType('amount', 'decimal_object');
-    ...
+public function initialize(array $config): void {
+    parent::initialize($config);
 
-    return $schema;
+    ...
+    $this->getSchema()->setColumnType('amount', 'decimal_object');
 }
 ```
 
