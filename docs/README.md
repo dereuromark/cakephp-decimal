@@ -145,7 +145,7 @@ define('ZERO_WITH_DEFAULT_PRECISION', '0.00');
 Usually you do not change any validation as all incoming values are not yet objects. They become VO in the patching process and will be such after validation and before saving.
 In rare cases where you need to patch in the objects, you can cast the values beforehand:
 ```php
-    $data['total'] = (string)$$total;
+    $data['total'] = (string)$total;
     $data['discount'] = (string)$discount;
     $order = $ordersTable->patchEntity($order, $data);
 ```
