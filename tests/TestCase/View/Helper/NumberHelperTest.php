@@ -39,6 +39,9 @@ class NumberHelperTest extends TestCase {
 		$string = '12.123';
 		$result = $this->Number->format(Decimal::create($string));
 		$this->assertSame($string, $result);
+
+		$result = $this->Number->format(null);
+		$this->assertSame('', $result);
 	}
 
 	/**
@@ -56,6 +59,9 @@ class NumberHelperTest extends TestCase {
 		$result = $this->Number->currency(Decimal::create($string), 'EUR');
 		$this->assertTextContains('€', $result);
 		$this->assertTextContains('12.13', $result);
+
+		$result = $this->Number->currency(null);
+		$this->assertSame('', $result);
 	}
 
 	/**
@@ -69,6 +75,9 @@ class NumberHelperTest extends TestCase {
 		$string = '-13.14';
 		$result = $this->Number->formatDelta(Decimal::create($string));
 		$this->assertSame($string, $result);
+
+		$result = $this->Number->formatDelta(null);
+		$this->assertSame('', $result);
 	}
 
 	/**
@@ -82,6 +91,9 @@ class NumberHelperTest extends TestCase {
 		$string = '111.23';
 		$result = $this->Number->precision(Decimal::create($string));
 		$this->assertSame('111.230', $result);
+
+		$result = $this->Number->precision(null);
+		$this->assertSame('', $result);
 	}
 
 	/**
@@ -91,6 +103,9 @@ class NumberHelperTest extends TestCase {
 		$string = '0.123';
 		$result = $this->Number->toPercentage(Decimal::create($string));
 		$this->assertSame('12.30%', $result);
+
+		$result = $this->Number->toPercentage(null);
+		$this->assertSame('', $result);
 	}
 
 }
