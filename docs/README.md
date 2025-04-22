@@ -176,7 +176,7 @@ class Validation extends CoreValidation {
 }
 ```
 
-and
+Note: The following is only needed < CakePHP 5.2 to "hack" the extended validation class to be found.
 ```php
 // in your bootstrap
 \Cake\Validation\Validator::addDefaultProvider('default', new \Cake\Validation\RulesProvider(\App\Validation\Validation::class));
