@@ -5,7 +5,7 @@
 	"type": "cakephp-plugin",
 	"require": {
 		"php": ">=8.1",
-		"cakephp/cakephp": "^5.0.0",
+		"cakephp/cakephp": "^5.1.1",
 		"php-collective/decimal-object": "^1.0.0"
 	},
 	"require-dev": {
