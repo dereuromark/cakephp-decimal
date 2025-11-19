@@ -18,4 +18,8 @@ phpunit.xml.dist export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
 .editorconfig export-ignore
-tests/test_app export-ignore
+.github export-ignore
+docs export-ignore
+tests export-ignore
+phpcs.xml export-ignore
+phpstan.neon export-ignore

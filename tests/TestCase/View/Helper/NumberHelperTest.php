@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CakeDecimal\Test\TestCase\View\Helper;
 
