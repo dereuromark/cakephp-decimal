@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CakeDecimal\Test\TestCase\Database\Type;
 
@@ -323,7 +323,7 @@ class DecimalObjectTypeTest extends TestCase {
 	protected function isConnection(string $driver): bool {
 		$config = ConnectionManager::getConfig('test');
 
-		return strpos($config['driver'], $driver) !== false;
+		return str_contains($config['driver'], $driver);
 	}
 
 	/**

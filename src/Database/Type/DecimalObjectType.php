@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace CakeDecimal\Database\Type;
 
@@ -16,7 +16,7 @@ use RuntimeException;
  * and Shim plugin (using string in 3.x just like 4.x will).
  * As value object you have a few advantages, especially on handling the values inside your business logic.
  *
- * @link https://github.com/php-collecctive/decimal
+ * @link https://github.com/php-collective/decimal-object
  */
 class DecimalObjectType extends BaseType implements BatchCastingInterface {
 
