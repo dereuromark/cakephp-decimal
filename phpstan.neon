@@ -6,4 +6,3 @@ parameters:
 		- %rootDir%/../../../tests/bootstrap.php
 	ignoreErrors:
 		- identifier: missingType.iterableValue
-		- identifier: missingType.generics
