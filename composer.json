@@ -3,6 +3,25 @@
 	"description": "CakePHP plugin for decimal handling via value object. Provides DecimalType class.",
 	"license": "MIT",
 	"type": "cakephp-plugin",
+	"keywords": [
+		"cakephp",
+		"plugin",
+		"decimal",
+		"precision",
+		"value-object",
+		"numbers"
+	],
+	"authors": [
+		{
+			"name": "Mark Scherer",
+			"homepage": "https://www.dereuromark.de",
+			"role": "Maintainer"
+		}
+	],
+	"homepage": "https://github.com/dereuromark/cakephp-decimal",
+	"support": {
+		"source": "https://github.com/dereuromark/cakephp-decimal"
+	},
 	"require": {
 		"php": ">=8.2",
 		"cakephp/cakephp": "^5.1.1",
