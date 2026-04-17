@@ -219,7 +219,6 @@ class DecimalObjectTypeTest extends TestCase {
 	 * @return void
 	 */
 	public function testPrecisionFloatExtended(): void {
-
 		$this->Table = TableRegistry::getTableLocator()->get('FloatTypes', ['className' => FloatTypesTable::class]);
 
 		$record = $this->Table->newEntity([
