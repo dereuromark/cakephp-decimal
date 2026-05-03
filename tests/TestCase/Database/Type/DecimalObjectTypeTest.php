@@ -274,7 +274,66 @@ class DecimalObjectTypeTest extends TestCase {
 		$result = $type->marshal($value);
 		I18n::setLocale($locale);
 
-		$this->assertSame('12.121', (string)$result);
+		// Trailing zeros are preserved — the locale parser must not route
+		// values through a float intermediate that silently strips them.
+		$this->assertSame('12.1210', (string)$result);
+	}
+
+	/**
+	 * Locale-aware marshalling must preserve full precision and not route
+	 * the value through a float intermediate (which would silently truncate
+	 * the input to ~15 significant decimal digits).
+	 *
+	 * @return void
+	 */
+	public function testUseLocaleParserPreservesPrecision(): void {
+		$type = new DecimalObjectType();
+		$type->useLocaleParser();
+
+		$locale = I18n::getLocale();
+		I18n::setLocale('de_DE');
+		try {
+			// 30 fractional digits — far beyond float precision.
+			$result = $type->marshal('0,000000000000000000000000000001');
+			$this->assertInstanceOf(Decimal::class, $result);
+			$this->assertSame('0.000000000000000000000000000001', (string)$result);
+
+			// Grouping separator (.) plus decimal separator (,) for de_DE.
+			$result = $type->marshal('1.234.567,890123456789012345');
+			$this->assertInstanceOf(Decimal::class, $result);
+			$this->assertSame('1234567.890123456789012345', (string)$result);
+		} finally {
+			I18n::setLocale($locale);
+		}
+
+		// And for an en_US-style input where decimal separator is `.`.
+		I18n::setLocale('en_US');
+		try {
+			$result = $type->marshal('1,234,567.890123456789012345');
+			$this->assertInstanceOf(Decimal::class, $result);
+			$this->assertSame('1234567.890123456789012345', (string)$result);
+		} finally {
+			I18n::setLocale($locale);
+		}
+	}
+
+	/**
+	 * Without the locale parser, ambiguous group-separator strings must not
+	 * be silently accepted — Decimal::create() would throw on them, surfacing
+	 * as a runtime error far from the input source.
+	 *
+	 * @return void
+	 */
+	public function testMarshalRejectsAmbiguousGroupedString(): void {
+		$type = new DecimalObjectType();
+
+		$this->assertNull($type->marshal('1,234.56'));
+		$this->assertNull($type->marshal('1.234,56'));
+		$this->assertNull($type->marshal('1 234.56'));
+
+		// Plain canonical decimals still pass through.
+		$this->assertSame('1234.56', (string)$type->marshal('1234.56'));
+		$this->assertSame('-1234.56', (string)$type->marshal('-1234.56'));
 	}
 	/**
 	 * @return void

@@ -5,6 +5,7 @@ namespace CakeDecimal\Database\Type;
 use Cake\Database\Driver;
 use Cake\Database\Type\BaseType;
 use Cake\Database\Type\BatchCastingInterface;
+use NumberFormatter;
 use PDO;
 use PhpCollective\DecimalObject\Decimal;
 use RuntimeException;
@@ -127,7 +128,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		if (is_numeric($value)) {
 			return Decimal::create($value);
 		}
-		if (is_string($value) && preg_match('/^[0-9,. ]+$/', $value)) {
+		if (is_string($value) && preg_match('/^-?[0-9]+(?:\.[0-9]+)?$/', $value)) {
 			return Decimal::create($value);
 		}
 		if ($value instanceof Decimal) {
@@ -173,17 +174,42 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	}
 
 	/**
-	 * Converts a string into a float point after parsing it using the locale
-	 * aware parser.
+	 * Converts a locale-formatted string into a Decimal value object.
 	 *
-	 * @param string $value The value to parse and convert to an float.
+	 * Locale parsing is performed without a float intermediate so the full
+	 * precision of the input string is preserved. The active locale's
+	 * grouping separator is stripped and its decimal separator is replaced
+	 * with `.` so the resulting canonical numeric string can be passed
+	 * directly to Decimal::create().
+	 *
+	 * @param string $value The value to parse and convert to a Decimal.
 	 * @return \PhpCollective\DecimalObject\Decimal
 	 */
 	protected function _parseValue(string $value): Decimal {
 		/** @var \Cake\I18n\Number $class */
 		$class = static::$numberClass;
+		$formatter = $class::formatter();
 
-		return Decimal::create($class::parseFloat($value));
+		$groupingSeparator = $formatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
+		$decimalSeparator = $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+
+		$canonical = $value;
+		if ($groupingSeparator !== '') {
+			$canonical = str_replace($groupingSeparator, '', $canonical);
+		}
+		if ($decimalSeparator !== '' && $decimalSeparator !== '.') {
+			$canonical = str_replace($decimalSeparator, '.', $canonical);
+		}
+		$canonical = trim($canonical);
+
+		if ($canonical === '' || !is_numeric($canonical)) {
+			// Fall back to NumberFormatter parsing when canonicalization fails
+			// (e.g. exotic locales). This still loses precision, but matches
+			// the historical behavior for unrecognized inputs.
+			return Decimal::create($class::parseFloat($value));
+		}
+
+		return Decimal::create($canonical);
 	}
 
 }
