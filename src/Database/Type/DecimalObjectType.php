@@ -128,7 +128,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		if (is_numeric($value)) {
 			return Decimal::create($value);
 		}
-		if (is_string($value) && preg_match('/^-?[0-9]+(?:\.[0-9]+)?$/', $value)) {
+		if (is_string($value) && preg_match('/^-?\d+(?:\.\d+)?$/', $value)) {
 			return Decimal::create($value);
 		}
 		if ($value instanceof Decimal) {
