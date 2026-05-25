@@ -381,7 +381,7 @@ class DecimalObjectTypeTest extends TestCase {
 	protected function isConnection(string $driver): bool {
 		$config = ConnectionManager::getConfig('test');
 
-		return str_contains((string)$config['driver'], $driver);
+		return str_contains(strtolower((string)$config['driver']), strtolower($driver));
 	}
 
 	/**
