@@ -183,9 +183,9 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	 * directly to Decimal::create().
 	 *
 	 * @param string $value The value to parse and convert to a Decimal.
-	 * @return \PhpCollective\DecimalObject\Decimal
+	 * @return \PhpCollective\DecimalObject\Decimal|null
 	 */
-	protected function _parseValue(string $value): Decimal {
+	protected function _parseValue(string $value): ?Decimal {
 		/** @var \Cake\I18n\Number $class */
 		$class = static::$numberClass;
 		$formatter = $class::formatter();
@@ -206,7 +206,12 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			// Fall back to NumberFormatter parsing when canonicalization fails
 			// (e.g. exotic locales). This still loses precision, but matches
 			// the historical behavior for unrecognized inputs.
-			return Decimal::create($class::parseFloat($value));
+			$parsed = $formatter->parse($value, NumberFormatter::TYPE_DOUBLE);
+			if ($parsed === false) {
+				return Decimal::create($value);
+			}
+
+			return Decimal::create($parsed);
 		}
 
 		return Decimal::create($canonical);
