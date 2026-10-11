@@ -348,9 +348,10 @@ class DecimalObjectTypeTest extends TestCase {
 		$locale = I18n::getLocale();
 		try {
 			I18n::setLocale('de_DE');
-			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456', '0.234', '-0.500', '00.234', '12,5,6', 'abc'] as $value) {
+			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456', '0.234', '-0.500', '00.234', '12,5,6', 'abc', '0 234', '1e99999999', '1.234e3'] as $value) {
 				$this->assertNull($type->marshal($value), $value);
 			}
+			$this->assertSame('12345678901234.56', (string)$type->marshal('12 345 678 901 234,56'));
 			$this->assertSame('19.90', (string)$type->marshal('19,90'));
 			$this->assertSame('1234.50', (string)$type->marshal('1.234,50'));
 			$this->assertSame('-1234567.89', (string)$type->marshal('-1.234.567,89'));
@@ -384,6 +385,18 @@ class DecimalObjectTypeTest extends TestCase {
 		} finally {
 			I18n::setLocale($locale);
 		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testMarshalRejectsExponentNotationAndNonFiniteFloats(): void {
+		$type = new DecimalObjectType();
+		$this->assertNull($type->marshal('1e99999999'));
+		$this->assertNull($type->marshal('1e3'));
+		$this->assertNull($type->marshal(INF));
+		$this->assertNull($type->marshal(NAN));
+		$this->assertSame('1000', (string)$type->marshal('1000'));
 	}
 
 	/**

@@ -121,6 +121,9 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		if ($value === null || $value === '') {
 			return null;
 		}
+		if ((is_string($value) && strpbrk($value, 'eE') !== false) || (is_float($value) && !is_finite($value))) {
+			return null;
+		}
 		if (is_string($value) && $this->_useLocaleParser) {
 			return $this->_parseValue($value);
 		}
@@ -200,7 +203,9 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			static fn (array $match): string => (string)IntlChar::digit($match[0]),
 			$canonical,
 		) ?? $canonical;
-		$localized = $canonical;
+		if ($groupingSeparator !== '') {
+			$canonical = preg_replace("/[\\p{Zs}'’]/u", $groupingSeparator, $canonical) ?? $canonical;
+		}
 		if ($groupingSeparator !== '' && str_contains($canonical, $groupingSeparator)) {
 			$parts = $decimalSeparator !== '' ? explode($decimalSeparator, $canonical) : [$canonical];
 			if (count($parts) > 2 || (isset($parts[1]) && str_contains($parts[1], $groupingSeparator))) {
@@ -233,21 +238,8 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		}
 		$canonical = trim($canonical);
 
-		if ($canonical === '' || !is_numeric($canonical)) {
-			// Fall back to NumberFormatter parsing when canonicalization fails
-			// (e.g. exotic locales). This can lose precision; only accept
-			// the fallback when the full input was parsed.
-			$position = 0;
-			$parsed = $formatter->parse($localized, NumberFormatter::TYPE_DOUBLE, $position);
-			// PHP 8.4 switched formatter offsets from UTF-16 units to UTF-8 bytes.
-			$length = PHP_VERSION_ID >= 80400
-				? strlen($localized)
-				: intdiv(strlen(mb_convert_encoding($localized, 'UTF-16LE', 'UTF-8')), 2);
-			if ($parsed === false || !is_finite($parsed) || $position !== $length) {
-				return null;
-			}
-
-			return Decimal::create($parsed);
+		if ($canonical === '' || !is_numeric($canonical) || strpbrk($canonical, 'eE') !== false) {
+			return null;
 		}
 
 		return Decimal::create($canonical);

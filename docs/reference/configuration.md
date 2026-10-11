@@ -30,7 +30,7 @@ $value = $type->marshal('1.234,50');
 echo (string)$value; // 1234.50
 ```
 
-The parser checks grouping widths against the locale, removes valid grouping separators and replaces the decimal separator without using a float for ordinary numeric input. Malformed grouping returns `null`. For input that cannot be normalized, it falls back to NumberFormatter parsing, which can lose precision. The fallback must consume the full input. Unparseable or partially parsed input returns `null`; keep validation to present useful errors to users.
+The parser checks grouping widths against the locale, removes valid grouping separators and replaces the decimal separator using strings. It also handles native decimal digits, localized minus signs, and spaces or apostrophes used as grouping separators. Grouping must still have the correct widths; malformed or unrecognized input returns `null`. No float conversion is used for localized string input. Keep validation to present useful errors to users.
 
 Only enable locale parsing for inputs written in the active locale. Under `de_DE`, a dot denotes thousands grouping: canonical input `19.90` has an invalid two-digit final group and returns `null`. Use `19,90` for that locale. Canonical values such as `1.234` can still be valid grouping in that locale and mean `1234`. This ambiguity also affects JSON payloads, number inputs and decimal strings produced by casting a Decimal object. Use the default parser for canonical input, or separate localized input from those paths.
 

@@ -2,7 +2,7 @@
 
 | Method | Behavior |
 | --- | --- |
-| `marshal()` | Converts numeric request input or a Decimal object; returns `null` for empty or invalid unlocalized input. Optional locale parsing handles string input separately. |
+| `marshal()` | Converts numeric request input or a Decimal object; returns `null` for empty or invalid unlocalized input. Exponent notation in request strings and non-finite floats are rejected. Optional locale parsing handles string input separately. |
 | `toPHP()` | Converts non-null database values to Decimal objects; optional auto trim applies here. |
 | `manyToPHP()` | Applies `toPHP()` to selected, non-null fields and leaves other values unchanged. |
 | `toDatabase()` | Returns `null` for null or empty input; converts other input to Decimal when needed. |
