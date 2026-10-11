@@ -348,7 +348,7 @@ class DecimalObjectTypeTest extends TestCase {
 		$locale = I18n::getLocale();
 		try {
 			I18n::setLocale('de_DE');
-			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456', '0.234', '-0.500', '00.234'] as $value) {
+			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456', '0.234', '-0.500', '00.234', '12,5,6', 'abc'] as $value) {
 				$this->assertNull($type->marshal($value), $value);
 			}
 			$this->assertSame('19.90', (string)$type->marshal('19,90'));
@@ -357,6 +357,8 @@ class DecimalObjectTypeTest extends TestCase {
 
 			I18n::setLocale('en_US');
 			$this->assertNull($type->marshal('12,34.50'));
+			$this->assertNull($type->marshal('1.2.3'));
+			$this->assertNull($type->marshal('123abc'));
 			$this->assertSame('1234.50', (string)$type->marshal('1,234.50'));
 
 			I18n::setLocale('hi_IN');

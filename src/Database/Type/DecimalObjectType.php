@@ -234,11 +234,12 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 
 		if ($canonical === '' || !is_numeric($canonical)) {
 			// Fall back to NumberFormatter parsing when canonicalization fails
-			// (e.g. exotic locales). This still loses precision, but matches
-			// the historical behavior for unrecognized inputs.
-			$parsed = $formatter->parse($value, NumberFormatter::TYPE_DOUBLE);
-			if ($parsed === false) {
-				return Decimal::create($value);
+			// (e.g. exotic locales). This can lose precision; only accept
+			// the fallback when the full input was parsed.
+			$position = 0;
+			$parsed = $formatter->parse($canonical, NumberFormatter::TYPE_DOUBLE, $position);
+			if ($parsed === false || $position !== mb_strlen($canonical)) {
+				return null;
 			}
 
 			return Decimal::create($parsed);
