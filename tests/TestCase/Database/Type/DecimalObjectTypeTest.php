@@ -348,7 +348,7 @@ class DecimalObjectTypeTest extends TestCase {
 		$locale = I18n::getLocale();
 		try {
 			I18n::setLocale('de_DE');
-			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456'] as $value) {
+			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456', '0.234', '-0.500', '00.234'] as $value) {
 				$this->assertNull($type->marshal($value), $value);
 			}
 			$this->assertSame('19.90', (string)$type->marshal('19,90'));
@@ -362,6 +362,18 @@ class DecimalObjectTypeTest extends TestCase {
 			I18n::setLocale('hi_IN');
 			$this->assertSame('1234567.89', (string)$type->marshal('12,34,567.89'));
 			$this->assertNull($type->marshal('1,234,567.89'));
+
+			I18n::setLocale('sv_SE');
+			$this->assertSame('-1234.50', (string)$type->marshal("−1\u{00A0}234,50"));
+
+			I18n::setLocale('ar_EG');
+			$this->assertSame('1234.5', (string)$type->marshal('١٬٢٣٤٫٥'));
+
+			I18n::setLocale('bn_BD');
+			$this->assertSame('1234567.89', (string)$type->marshal('১২,৩৪,৫৬৭.৮৯'));
+
+			I18n::setLocale('ar_AE');
+			$this->assertSame('-1234567.25', (string)$type->marshal("\u{200E}-1,234,567.25"));
 		} finally {
 			I18n::setLocale($locale);
 		}

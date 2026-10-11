@@ -5,6 +5,7 @@ namespace CakeDecimal\Database\Type;
 use Cake\Database\Driver;
 use Cake\Database\Type\BaseType;
 use Cake\Database\Type\BatchCastingInterface;
+use IntlChar;
 use NumberFormatter;
 use PDO;
 use PhpCollective\DecimalObject\Decimal;
@@ -192,6 +193,13 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		$decimalSeparator = $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
 
 		$canonical = trim($value);
+		$canonical = preg_replace('/[\x{061C}\x{200E}\x{200F}\x{202A}-\x{202E}\x{2066}-\x{2069}]/u', '', $canonical) ?? $canonical;
+		$canonical = str_replace('−', '-', $canonical);
+		$canonical = preg_replace_callback(
+			'/\p{Nd}/u',
+			static fn (array $match): string => (string)IntlChar::digit($match[0]),
+			$canonical,
+		) ?? $canonical;
 		if ($groupingSeparator !== '' && str_contains($canonical, $groupingSeparator)) {
 			$parts = $decimalSeparator !== '' ? explode($decimalSeparator, $canonical) : [$canonical];
 			if (count($parts) > 2 || (isset($parts[1]) && str_contains($parts[1], $groupingSeparator))) {
@@ -206,7 +214,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			$firstGroup = array_shift($groups);
 			if ($primarySize < 1 ||
 				!ctype_digit($lastGroup) || strlen($lastGroup) !== $primarySize ||
-				!ctype_digit($firstGroup) || strlen($firstGroup) > $secondarySize
+				!ctype_digit($firstGroup) || $firstGroup[0] === '0' || strlen($firstGroup) > $secondarySize
 			) {
 				return null;
 			}
