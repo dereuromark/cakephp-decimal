@@ -6,4 +6,3 @@ Older documentation claimed that the Number helper avoided floating-point format
 
 If replacing a core decimal string mapping, update code that assumes entity values are strings. Cast explicitly when passing values to validators or APIs that require strings. Apply entity type annotations and review serializers, JSON responses and templates.
 
-The current cleanup removes unused mock expectations notices and updates conversion comments. It does not change the database schema or the default type conversion options.

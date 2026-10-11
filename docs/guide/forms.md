@@ -20,7 +20,7 @@ $data['total'] = (string)$total;
 $order = $orders->patchEntity($order, $data);
 ```
 
-Locale parsing is optional; see [Configuration](../reference/configuration). Your validators must accept the input notation too. Enabling conversion does not make a canonical-decimal validator accept commas or grouping separators.
+Locale parsing is optional; see [Configuration](../reference/configuration). Your validators must accept the input notation too. Enabling conversion does not make a canonical-decimal validator accept commas or grouping separators. With locale parsing enabled, canonical strings can be misinterpreted: `19.90` becomes `1990` under `de_DE`. The object-to-string example above is for the default parser; use separate conversion paths for canonical and localized data.
 
 Changing the type does not add entity property annotations. If you use IdeHelper, add a type map to your application configuration:
 
