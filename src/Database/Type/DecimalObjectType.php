@@ -243,7 +243,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			$length = PHP_VERSION_ID >= 80400
 				? strlen($localized)
 				: intdiv(strlen(mb_convert_encoding($localized, 'UTF-16LE', 'UTF-8')), 2);
-			if ($parsed === false || $position !== $length) {
+			if ($parsed === false || !is_finite($parsed) || $position !== $length) {
 				return null;
 			}
 

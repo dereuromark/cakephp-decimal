@@ -359,6 +359,8 @@ class DecimalObjectTypeTest extends TestCase {
 			$this->assertNull($type->marshal('12,34.50'));
 			$this->assertNull($type->marshal('1.2.3'));
 			$this->assertNull($type->marshal('123abc'));
+			$this->assertNull($type->marshal('NaN'));
+			$this->assertNull($type->marshal('∞'));
 			$this->assertSame('1234.50', (string)$type->marshal('1,234.50'));
 
 			I18n::setLocale('hi_IN');
@@ -369,6 +371,7 @@ class DecimalObjectTypeTest extends TestCase {
 			$this->assertSame('-1234.50', (string)$type->marshal("−1\u{00A0}234,50"));
 
 			$this->assertSame('1234.5', (string)$type->marshal("1\u{202F}234,5"));
+			$this->assertNull($type->marshal("1\u{202F}234,5x"));
 
 			I18n::setLocale('ar_EG');
 			$this->assertSame('1234.5', (string)$type->marshal('١٬٢٣٤٫٥'));
