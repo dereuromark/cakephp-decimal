@@ -19,6 +19,8 @@ features:
     details: Read decimal columns as value objects and convert submitted values during marshalling.
   - title: Decimal arithmetic
     details: Calculate with decimal strings using the php-collective Decimal object.
+    link: https://php-collective.github.io/decimal-object/
+    linkText: Decimal object documentation
   - title: Choose your scope
     details: Apply the type to all decimal columns or register an alias for selected columns.
 ---

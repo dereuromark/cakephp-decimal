@@ -12,4 +12,4 @@ The database enforces its own decimal precision and scale. The plugin does not a
 
 The value object is immutable. Arithmetic produces a new object; it does not modify the original. Use decimal strings to avoid introducing float error before conversion.
 
-See the [Decimal object documentation](https://github.com/php-collective/decimal-object/tree/master/docs) for arithmetic, rounding and comparison APIs.
+See the [Decimal object documentation](https://php-collective.github.io/decimal-object/) for arithmetic, rounding and comparison APIs.
