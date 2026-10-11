@@ -191,7 +191,31 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		$groupingSeparator = $formatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
 		$decimalSeparator = $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
 
-		$canonical = $value;
+		$canonical = trim($value);
+		if ($groupingSeparator !== '' && str_contains($canonical, $groupingSeparator)) {
+			$parts = $decimalSeparator !== '' ? explode($decimalSeparator, $canonical) : [$canonical];
+			if (count($parts) > 2 || (isset($parts[1]) && str_contains($parts[1], $groupingSeparator))) {
+				return null;
+			}
+
+			$groups = explode($groupingSeparator, ltrim($parts[0], '+-'));
+			$primarySize = (int)$formatter->getAttribute(NumberFormatter::GROUPING_SIZE);
+			$secondarySize = (int)$formatter->getAttribute(NumberFormatter::SECONDARY_GROUPING_SIZE);
+			$secondarySize = $secondarySize ?: $primarySize;
+			$lastGroup = array_pop($groups);
+			$firstGroup = array_shift($groups);
+			if ($primarySize < 1 ||
+				!ctype_digit($lastGroup) || strlen($lastGroup) !== $primarySize ||
+				!ctype_digit($firstGroup) || strlen($firstGroup) > $secondarySize
+			) {
+				return null;
+			}
+			foreach ($groups as $group) {
+				if (!ctype_digit($group) || strlen($group) !== $secondarySize) {
+					return null;
+				}
+			}
+		}
 		if ($groupingSeparator !== '') {
 			$canonical = str_replace($groupingSeparator, '', $canonical);
 		}

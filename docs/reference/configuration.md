@@ -30,8 +30,8 @@ $value = $type->marshal('1.234,50');
 echo (string)$value; // 1234.50
 ```
 
-The parser removes the locale's grouping separator and replaces its decimal separator without using a float for ordinary numeric input. For input that cannot be normalized, it falls back to NumberFormatter parsing, which can lose precision. Invalid input can throw `InvalidArgumentException` rather than return `null` on this path. Validate user input before conversion.
+The parser checks grouping widths against the locale, removes valid grouping separators and replaces the decimal separator without using a float for ordinary numeric input. Malformed grouping returns `null`. For input that cannot be normalized, it falls back to NumberFormatter parsing, which can lose precision. Invalid input can throw `InvalidArgumentException` rather than return `null` on this path. Validate user input before conversion.
 
-Only enable locale parsing for inputs written in the active locale. Under `de_DE`, the grouping separator is a dot: canonical input `19.90` becomes `1990`. This also affects JSON payloads, number inputs and decimal strings produced by casting a Decimal object. Use the default parser for canonical input, or separate localized input from those paths.
+Only enable locale parsing for inputs written in the active locale. Under `de_DE`, a dot denotes thousands grouping: canonical input `19.90` has an invalid two-digit final group and returns `null`. Use `19,90` for that locale. Canonical values such as `1.234` can still be valid grouping in that locale and mean `1234`. This ambiguity also affects JSON payloads, number inputs and decimal strings produced by casting a Decimal object. Use the default parser for canonical input, or separate localized input from those paths.
 
 The public static `DecimalObjectType::$numberClass` defaults to `Cake\I18n\Number`. Locale parsing only supports that class or a subclass. This setting selects the formatter, not a custom Decimal value-object class: conversion always uses `PhpCollective\DecimalObject\Decimal`.

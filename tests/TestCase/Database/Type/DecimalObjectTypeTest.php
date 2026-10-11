@@ -340,6 +340,34 @@ class DecimalObjectTypeTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testLocaleParserRejectsMalformedGrouping(): void {
+		$type = new DecimalObjectType();
+		$type->useLocaleParser();
+		$locale = I18n::getLocale();
+		try {
+			I18n::setLocale('de_DE');
+			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456'] as $value) {
+				$this->assertNull($type->marshal($value), $value);
+			}
+			$this->assertSame('19.90', (string)$type->marshal('19,90'));
+			$this->assertSame('1234.50', (string)$type->marshal('1.234,50'));
+			$this->assertSame('-1234567.89', (string)$type->marshal('-1.234.567,89'));
+
+			I18n::setLocale('en_US');
+			$this->assertNull($type->marshal('12,34.50'));
+			$this->assertSame('1234.50', (string)$type->marshal('1,234.50'));
+
+			I18n::setLocale('hi_IN');
+			$this->assertSame('1234567.89', (string)$type->marshal('12,34,567.89'));
+			$this->assertNull($type->marshal('1,234,567.89'));
+		} finally {
+			I18n::setLocale($locale);
+		}
+	}
+
+	/**
 	 * Without the locale parser, ambiguous group-separator strings must not
 	 * be silently accepted — Decimal::create() would throw on them, surfacing
 	 * as a runtime error far from the input source.

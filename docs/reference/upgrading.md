@@ -6,3 +6,5 @@ Older documentation claimed that the Number helper avoided floating-point format
 
 If replacing a core decimal string mapping, update code that assumes entity values are strings. Cast explicitly when passing values to validators or APIs that require strings. Apply entity type annotations and review serializers, JSON responses and templates.
 
+
+The unreleased locale-parser fix rejects malformed grouping instead of stripping every separator. For example, `19.90` returns `null` under `de_DE`; submit `19,90` for that locale. Grouping follows the locale, including secondary group sizes such as Indian numbering.
