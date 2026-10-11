@@ -78,6 +78,28 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testGettingStartedArithmetic(): void {
+		$record = $this->Table->newEntity([
+			'name' => 'First order',
+			'amount_required' => '19.90',
+		]);
+		$this->assertSame([], $record->getErrors());
+		$this->assertInstanceOf(Decimal::class, $record->amount_required);
+
+		$original = $record->amount_required;
+		$record->amount_required = $original->add('0.10');
+		$this->assertSame('19.90', (string)$original);
+		$this->assertSame('20.00', (string)$record->amount_required);
+		$this->Table->saveOrFail($record);
+
+		$stored = $this->Table->get($record->id);
+		$this->assertInstanceOf(Decimal::class, $stored->amount_required);
+		$this->assertTrue($stored->amount_required->equals('20.00'));
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testSaveObject(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
@@ -255,7 +277,7 @@ class DecimalObjectTypeTest extends TestCase {
 		$type->useAutoTrim();
 
 		$value = '12.121000';
-		$driver = $this->getMockBuilder(Driver::class)->getMock();
+		$driver = $this->createStub(Driver::class);
 		$result = $type->toPHP($value, $driver);
 
 		$this->assertSame('12.121', (string)$result);
@@ -340,7 +362,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 */
 	public function testManyToPHP(): void {
 		$type = new DecimalObjectType();
-		$driver = $this->getMockBuilder(Driver::class)->getMock();
+		$driver = $this->createStub(Driver::class);
 
 		$values = [
 			'x' => 1.1,

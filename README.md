@@ -9,26 +9,10 @@
 [![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-decimal/d/total.svg)](https://packagist.org/packages/dereuromark/cakephp-decimal)
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--2--R-purple.svg?style=flat-square)](https://github.com/php-fig-rectified/fig-rectified-standards)
 
-This is an alternative to
-* the core Decimal type (using plain strings)
+Map CakePHP decimal columns to immutable [Decimal value objects](https://github.com/php-collective/decimal-object) for arithmetic and form handling.
 
-As value object you have a few advantages, especially on handling the values inside your business logic.
+Read the [documentation](https://dereuromark.github.io/cakephp-decimal/), starting with [Installation](https://dereuromark.github.io/cakephp-decimal/guide/installation) and [Getting started](https://dereuromark.github.io/cakephp-decimal/guide/getting-started).
 
-This branch is for use with **CakePHP 5.1+**. See [version map](https://github.com/dereuromark/cakephp-decimal/wiki#cakephp-version-map) for details.
+Composer defines the supported versions and required extensions. The plugin requires BCMath.
 
-## Requirements
-
-- Uses [php-collective/decimal-object](https://github.com/php-collective/decimal-object) and as such requires bcmath extension.
-
-## Installation
-Require the plugin through Composer:
-```
-composer require dereuromark/cakephp-decimal
-```
-
-## Setup and Usage
-See [Documentation](docs/).
-
-## Demo
-
-Live example see https://sandbox.dereuromark.de/sandbox/decimal-examples/forms
+See the [live demo](https://sandbox.dereuromark.de/sandbox/decimal-examples/forms).
