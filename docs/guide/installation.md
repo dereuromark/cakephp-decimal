@@ -1,9 +1,12 @@
 # Installation
 
-Install the plugin in your CakePHP application:
+This development branch requires CakePHP 6 and PHP 8.5. Run these commands
+in your application directory:
 
 ```sh
-composer require dereuromark/cakephp-decimal
+composer config minimum-stability dev
+composer config prefer-stable true
+composer require cakephp/cakephp:^6.0@dev dereuromark/cakephp-decimal:dev-cake6
 ```
 
 Composer checks the supported PHP and CakePHP versions and the required extensions. Enable `ext-bcmath` in both your CLI and web PHP environments.
