@@ -25,7 +25,7 @@
 	"require": {
 		"php": ">=8.2",
 		"cakephp/cakephp": "^5.1.1",
-		"php-collective/decimal-object": "^1.0.0"
+		"php-collective/decimal-object": "^1.0.0 || ^2.0.0"
 	},
 	"require-dev": {
 		"fig-r/psr2r-sniffer": "dev-master",

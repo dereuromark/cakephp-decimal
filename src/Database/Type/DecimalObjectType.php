@@ -57,7 +57,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		}
 
 		if (!($value instanceof Decimal)) {
-			$value = Decimal::create($value);
+			$value = $this->createDecimal($value);
 		}
 
 		return $value;
@@ -75,7 +75,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			return $value;
 		}
 
-		$decimal = Decimal::create($value);
+		$decimal = $this->createDecimal($value);
 		if ($this->_autoTrim) {
 			return $decimal->trim();
 		}
@@ -128,7 +128,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			return $this->_parseValue($value);
 		}
 		if (is_numeric($value)) {
-			return Decimal::create($value);
+			return $this->createDecimal($value);
 		}
 		if (is_string($value) && preg_match('/^-?\d+(?:\.\d+)?$/', $value)) {
 			return Decimal::create($value);
@@ -138,6 +138,21 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Decimal 2.x only takes floats through an explicit factory. Drivers such as SQLite
+	 * return floats for decimal columns, so those are passed on as the string PHP prints.
+	 *
+	 * @param \PhpCollective\DecimalObject\Decimal|string|float|int $value
+	 * @return \PhpCollective\DecimalObject\Decimal
+	 */
+	protected function createDecimal(mixed $value): Decimal {
+		if (is_float($value)) {
+			$value = str_replace('.0E', 'E', (string)$value);
+		}
+
+		return Decimal::create($value);
 	}
 
 	/**
