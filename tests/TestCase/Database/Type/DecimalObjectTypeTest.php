@@ -78,6 +78,28 @@ class DecimalObjectTypeTest extends TestCase {
 	/**
 	 * @return void
 	 */
+	public function testGettingStartedArithmetic(): void {
+		$record = $this->Table->newEntity([
+			'name' => 'First order',
+			'amount_required' => '19.90',
+		]);
+		$this->assertSame([], $record->getErrors());
+		$this->assertInstanceOf(Decimal::class, $record->amount_required);
+
+		$original = $record->amount_required;
+		$record->amount_required = $original->add('0.10');
+		$this->assertSame('19.90', (string)$original);
+		$this->assertSame('20.00', (string)$record->amount_required);
+		$this->Table->saveOrFail($record);
+
+		$stored = $this->Table->get($record->id);
+		$this->assertInstanceOf(Decimal::class, $stored->amount_required);
+		$this->assertTrue($stored->amount_required->equals('20.00'));
+	}
+
+	/**
+	 * @return void
+	 */
 	public function testSaveObject(): void {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
@@ -255,7 +277,7 @@ class DecimalObjectTypeTest extends TestCase {
 		$type->useAutoTrim();
 
 		$value = '12.121000';
-		$driver = $this->getMockBuilder(Driver::class)->getMock();
+		$driver = $this->createStub(Driver::class);
 		$result = $type->toPHP($value, $driver);
 
 		$this->assertSame('12.121', (string)$result);
@@ -318,6 +340,66 @@ class DecimalObjectTypeTest extends TestCase {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function testLocaleParserRejectsMalformedGrouping(): void {
+		$type = new DecimalObjectType();
+		$type->useLocaleParser();
+		$locale = I18n::getLocale();
+		try {
+			I18n::setLocale('de_DE');
+			foreach (['19.90', '1234.50', '1234.567', '1.23.456', '1,23.456', '0.234', '-0.500', '00.234', '12,5,6', 'abc', '0 234', '1e99999999', '1.234e3'] as $value) {
+				$this->assertNull($type->marshal($value), $value);
+			}
+			$this->assertSame('12345678901234.56', (string)$type->marshal('12 345 678 901 234,56'));
+			$this->assertSame('19.90', (string)$type->marshal('19,90'));
+			$this->assertSame('1234.50', (string)$type->marshal('1.234,50'));
+			$this->assertSame('-1234567.89', (string)$type->marshal('-1.234.567,89'));
+
+			I18n::setLocale('en_US');
+			$this->assertNull($type->marshal('12,34.50'));
+			$this->assertNull($type->marshal('1.2.3'));
+			$this->assertNull($type->marshal('123abc'));
+			$this->assertNull($type->marshal('NaN'));
+			$this->assertNull($type->marshal('∞'));
+			$this->assertSame('1234.50', (string)$type->marshal('1,234.50'));
+
+			I18n::setLocale('hi_IN');
+			$this->assertSame('1234567.89', (string)$type->marshal('12,34,567.89'));
+			$this->assertNull($type->marshal('1,234,567.89'));
+
+			I18n::setLocale('sv_SE');
+			$this->assertSame('-1234.50', (string)$type->marshal("−1\u{00A0}234,50"));
+
+			$this->assertSame('1234.5', (string)$type->marshal("1\u{202F}234,5"));
+			$this->assertNull($type->marshal("1\u{202F}234,5x"));
+
+			I18n::setLocale('ar_EG');
+			$this->assertSame('1234.5', (string)$type->marshal('١٬٢٣٤٫٥'));
+
+			I18n::setLocale('bn_BD');
+			$this->assertSame('1234567.89', (string)$type->marshal('১২,৩৪,৫৬৭.৮৯'));
+
+			I18n::setLocale('ar_AE');
+			$this->assertSame('-1234567.25', (string)$type->marshal("\u{200E}-1,234,567.25"));
+		} finally {
+			I18n::setLocale($locale);
+		}
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testMarshalRejectsExponentNotationAndNonFiniteFloats(): void {
+		$type = new DecimalObjectType();
+		$this->assertNull($type->marshal('1e99999999'));
+		$this->assertNull($type->marshal('1e3'));
+		$this->assertNull($type->marshal(INF));
+		$this->assertNull($type->marshal(NAN));
+		$this->assertSame('1000', (string)$type->marshal('1000'));
+	}
+
+	/**
 	 * Without the locale parser, ambiguous group-separator strings must not
 	 * be silently accepted — Decimal::create() would throw on them, surfacing
 	 * as a runtime error far from the input source.
@@ -340,7 +422,7 @@ class DecimalObjectTypeTest extends TestCase {
 	 */
 	public function testManyToPHP(): void {
 		$type = new DecimalObjectType();
-		$driver = $this->getMockBuilder(Driver::class)->getMock();
+		$driver = $this->createStub(Driver::class);
 
 		$values = [
 			'x' => 1.1,

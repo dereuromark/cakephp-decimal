@@ -5,6 +5,7 @@ namespace CakeDecimal\Database\Type;
 use Cake\Database\Driver;
 use Cake\Database\Type\BaseType;
 use Cake\Database\Type\BatchCastingInterface;
+use IntlChar;
 use NumberFormatter;
 use PDO;
 use PhpCollective\DecimalObject\Decimal;
@@ -13,9 +14,7 @@ use RuntimeException;
 /**
  * Decimal type converter using value object.
  *
- * This is an alternative to the core one (using float in 3.x and string in 4.x)
- * and Shim plugin (using string in 3.x just like 4.x will).
- * As value object you have a few advantages, especially on handling the values inside your business logic.
+ * Converts database decimals and request input to Decimal value objects.
  *
  * @link https://github.com/php-collective/decimal-object
  */
@@ -45,7 +44,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	protected $_useLocaleParser = false;
 
 	/**
-	 * Convert integer data into the database format.
+	 * Convert decimal data into the database format.
 	 *
 	 * @param \PhpCollective\DecimalObject\Decimal|string|float|int|null $value The value to convert.
 	 * @param \Cake\Database\Driver $driver The driver instance to convert with.
@@ -65,7 +64,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	}
 
 	/**
-	 * Convert float values to PHP floats
+	 * Convert database values to Decimal objects.
 	 *
 	 * @param string|float|int|null $value The value to convert.
 	 * @param \Cake\Database\Driver $driver The driver instance to convert with.
@@ -102,7 +101,7 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	}
 
 	/**
-	 * Get the correct PDO binding type for integer data.
+	 * Get the PDO binding type for decimal data.
 	 *
 	 * @param mixed $value The value being bound.
 	 * @param \Cake\Database\Driver $driver The driver.
@@ -120,6 +119,9 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 	 */
 	public function marshal(mixed $value): mixed {
 		if ($value === null || $value === '') {
+			return null;
+		}
+		if ((is_string($value) && strpbrk($value, 'eE') !== false) || (is_float($value) && !is_finite($value))) {
 			return null;
 		}
 		if (is_string($value) && $this->_useLocaleParser) {
@@ -193,7 +195,41 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		$groupingSeparator = $formatter->getSymbol(NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
 		$decimalSeparator = $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
 
-		$canonical = $value;
+		$canonical = trim($value);
+		$canonical = trim(preg_replace('/[\x{061C}\x{200E}\x{200F}\x{202A}-\x{202E}\x{2066}-\x{2069}]/u', '', $canonical) ?? $canonical);
+		$canonical = str_replace('−', '-', $canonical);
+		$canonical = preg_replace_callback(
+			'/\p{Nd}/u',
+			static fn (array $match): string => (string)IntlChar::digit($match[0]),
+			$canonical,
+		) ?? $canonical;
+		if ($groupingSeparator !== '') {
+			$canonical = preg_replace("/[\\p{Zs}'’]/u", $groupingSeparator, $canonical) ?? $canonical;
+		}
+		if ($groupingSeparator !== '' && str_contains($canonical, $groupingSeparator)) {
+			$parts = $decimalSeparator !== '' ? explode($decimalSeparator, $canonical) : [$canonical];
+			if (count($parts) > 2 || (isset($parts[1]) && str_contains($parts[1], $groupingSeparator))) {
+				return null;
+			}
+
+			$groups = explode($groupingSeparator, ltrim($parts[0], '+-'));
+			$primarySize = (int)$formatter->getAttribute(NumberFormatter::GROUPING_SIZE);
+			$secondarySize = (int)$formatter->getAttribute(NumberFormatter::SECONDARY_GROUPING_SIZE);
+			$secondarySize = $secondarySize ?: $primarySize;
+			$lastGroup = array_pop($groups);
+			$firstGroup = array_shift($groups);
+			if ($primarySize < 1 ||
+				!ctype_digit($lastGroup) || strlen($lastGroup) !== $primarySize ||
+				!ctype_digit($firstGroup) || $firstGroup[0] === '0' || strlen($firstGroup) > $secondarySize
+			) {
+				return null;
+			}
+			foreach ($groups as $group) {
+				if (!ctype_digit($group) || strlen($group) !== $secondarySize) {
+					return null;
+				}
+			}
+		}
 		if ($groupingSeparator !== '') {
 			$canonical = str_replace($groupingSeparator, '', $canonical);
 		}
@@ -202,16 +238,8 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		}
 		$canonical = trim($canonical);
 
-		if ($canonical === '' || !is_numeric($canonical)) {
-			// Fall back to NumberFormatter parsing when canonicalization fails
-			// (e.g. exotic locales). This still loses precision, but matches
-			// the historical behavior for unrecognized inputs.
-			$parsed = $formatter->parse($value, NumberFormatter::TYPE_DOUBLE);
-			if ($parsed === false) {
-				return Decimal::create($value);
-			}
-
-			return Decimal::create($parsed);
+		if ($canonical === '' || !is_numeric($canonical) || strpbrk($canonical, 'eE') !== false) {
+			return null;
 		}
 
 		return Decimal::create($canonical);
