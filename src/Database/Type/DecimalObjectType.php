@@ -193,13 +193,14 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 		$decimalSeparator = $formatter->getSymbol(NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
 
 		$canonical = trim($value);
-		$canonical = preg_replace('/[\x{061C}\x{200E}\x{200F}\x{202A}-\x{202E}\x{2066}-\x{2069}]/u', '', $canonical) ?? $canonical;
+		$canonical = trim(preg_replace('/[\x{061C}\x{200E}\x{200F}\x{202A}-\x{202E}\x{2066}-\x{2069}]/u', '', $canonical) ?? $canonical);
 		$canonical = str_replace('−', '-', $canonical);
 		$canonical = preg_replace_callback(
 			'/\p{Nd}/u',
 			static fn (array $match): string => (string)IntlChar::digit($match[0]),
 			$canonical,
 		) ?? $canonical;
+		$localized = $canonical;
 		if ($groupingSeparator !== '' && str_contains($canonical, $groupingSeparator)) {
 			$parts = $decimalSeparator !== '' ? explode($decimalSeparator, $canonical) : [$canonical];
 			if (count($parts) > 2 || (isset($parts[1]) && str_contains($parts[1], $groupingSeparator))) {
@@ -237,8 +238,12 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			// (e.g. exotic locales). This can lose precision; only accept
 			// the fallback when the full input was parsed.
 			$position = 0;
-			$parsed = $formatter->parse($canonical, NumberFormatter::TYPE_DOUBLE, $position);
-			if ($parsed === false || $position !== mb_strlen($canonical)) {
+			$parsed = $formatter->parse($localized, NumberFormatter::TYPE_DOUBLE, $position);
+			// PHP 8.4 switched formatter offsets from UTF-16 units to UTF-8 bytes.
+			$length = PHP_VERSION_ID >= 80400
+				? strlen($localized)
+				: intdiv(strlen(mb_convert_encoding($localized, 'UTF-16LE', 'UTF-8')), 2);
+			if ($parsed === false || $position !== $length) {
 				return null;
 			}
 

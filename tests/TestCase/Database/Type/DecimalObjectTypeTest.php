@@ -368,6 +368,8 @@ class DecimalObjectTypeTest extends TestCase {
 			I18n::setLocale('sv_SE');
 			$this->assertSame('-1234.50', (string)$type->marshal("−1\u{00A0}234,50"));
 
+			$this->assertSame('1234.5', (string)$type->marshal("1\u{202F}234,5"));
+
 			I18n::setLocale('ar_EG');
 			$this->assertSame('1234.5', (string)$type->marshal('١٬٢٣٤٫٥'));
 
