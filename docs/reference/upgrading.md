@@ -1,6 +1,6 @@
 # Upgrading
 
-Review the installed version's Composer constraints before upgrading CakePHP or PHP. The current code targets CakePHP 5; CakePHP 6 compatibility requires testing against that release.
+This development branch uses CakePHP 6 and PHP 8.5. Follow [Installation](../guide/installation.md) for development dependencies. The database type and number helper are tested against CakePHP 6; the decimal value-object dependency remains at its existing supported major version.
 
 Older documentation claimed that the Number helper avoided floating-point formatting and that a configurable custom value-object class was supported. The helper delegates to CakePHP's number formatter, and the type directly constructs the standard Decimal class. Review code that depended on either claim.
 

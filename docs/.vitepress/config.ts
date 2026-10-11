@@ -27,7 +27,7 @@ export default defineConfig({
     ],
     search: { provider: 'local' },
     socialLinks: [{ icon: 'github', link: 'https://github.com/dereuromark/cakephp-decimal' }],
-    editLink: { pattern: 'https://github.com/dereuromark/cakephp-decimal/edit/master/docs/:path' },
+    editLink: { pattern: 'https://github.com/dereuromark/cakephp-decimal/edit/cake6/docs/:path' },
     footer: { message: 'Released under the MIT License.', copyright: 'Copyright Mark Scherer' },
   },
 })
