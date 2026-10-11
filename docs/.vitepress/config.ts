@@ -12,6 +12,7 @@ export default defineConfig({
       { text: 'Installation', link: '/guide/installation' },
       { text: 'Getting started', link: '/guide/getting-started' },
       { text: 'Reference', link: '/reference/configuration' },
+      { text: 'Decimal API', link: 'https://php-collective.github.io/decimal-object/' },
     ],
     sidebar: [
         { text: 'Installation', link: '/guide/installation' },
@@ -21,7 +22,8 @@ export default defineConfig({
         { text: 'Formatting', link: '/guide/formatting' },
         { text: 'Configuration', link: '/reference/configuration' },
         { text: 'Conversion', link: '/reference/conversion' },
-        { text: 'Upgrading', link: '/reference/upgrading' }
+        { text: 'Upgrading', link: '/reference/upgrading' },
+        { text: 'Decimal object API', link: 'https://php-collective.github.io/decimal-object/reference/api' }
     ],
     search: { provider: 'local' },
     socialLinks: [{ icon: 'github', link: 'https://github.com/dereuromark/cakephp-decimal' }],

@@ -27,4 +27,8 @@ Include any other required fields in your application's order data. Decimal oper
 
 Pass decimal strings to `Decimal::create()` and arithmetic methods. A float may have lost precision before the plugin receives it.
 
+::: tip The value object
+`Decimal` comes from [php-collective/decimal-object](https://php-collective.github.io/decimal-object/). Its documentation covers [arithmetic](https://php-collective.github.io/decimal-object/guide/arithmetic), [rounding](https://php-collective.github.io/decimal-object/guide/rounding), [scale](https://php-collective.github.io/decimal-object/guide/scale) and the [full API](https://php-collective.github.io/decimal-object/reference/api).
+:::
+
 Use `(string)$stored->total` for the decimal representation. For localized display, read [Formatting](./formatting), including its precision limits.

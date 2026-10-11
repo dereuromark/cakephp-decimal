@@ -9,7 +9,7 @@
 [![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-decimal/d/total.svg)](https://packagist.org/packages/dereuromark/cakephp-decimal)
 [![Coding Standards](https://img.shields.io/badge/cs-PSR--2--R-purple.svg?style=flat-square)](https://github.com/php-fig-rectified/fig-rectified-standards)
 
-Map CakePHP decimal columns to immutable [Decimal value objects](https://github.com/php-collective/decimal-object) for arithmetic and form handling.
+Map CakePHP decimal columns to immutable [Decimal value objects](https://php-collective.github.io/decimal-object/) for arithmetic and form handling.
 
 Read the [documentation](https://dereuromark.github.io/cakephp-decimal/), starting with [Installation](https://dereuromark.github.io/cakephp-decimal/guide/installation) and [Getting started](https://dereuromark.github.io/cakephp-decimal/guide/getting-started).
 
