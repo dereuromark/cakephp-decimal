@@ -104,7 +104,7 @@ class DecimalObjectTypeTest extends TestCase {
 		$record = $this->Table->newEntity([
 			'name' => 'Foo',
 			'amount_required' => Decimal::create('0.000001'),
-			'amount_nullable' => Decimal::create(-1.11),
+			'amount_nullable' => Decimal::create('-1.11'),
 		]);
 		$this->Table->saveOrFail($record);
 
@@ -232,7 +232,7 @@ class DecimalObjectTypeTest extends TestCase {
 		}
 
 		// Directly doing math on the floats reveals the precision issues
-		$this->assertSame('3.6666666666667', (string)Decimal::create(4 / 3 + 7 / 3));
+		$this->assertSame('3.6666666666667', (string)Decimal::create((string)(4 / 3 + 7 / 3)));
 	}
 
 	/**
@@ -475,6 +475,27 @@ class DecimalObjectTypeTest extends TestCase {
 
 		$decimalThree = $decimalOne->divide($decimalTwo, 10);
 		$this->assertSame('0.5000000000', (string)$decimalThree);
+	}
+
+	/**
+	 * Floats reach the type from drivers such as SQLite and from entity data. Decimal 2.x
+	 * rejects them in create(), so the type has to convert them itself.
+	 *
+	 * @return void
+	 */
+	public function testFloatValues(): void {
+		$type = new DecimalObjectType();
+		$driver = $this->createStub(Driver::class);
+
+		$this->assertSame('19.9', (string)$type->toPHP(19.9, $driver));
+		$this->assertSame('-1.11', (string)$type->toDatabase(-1.11, $driver));
+		$this->assertSame('0.3', (string)$type->marshal(0.1 + 0.2));
+		$this->assertSame('5', (string)$type->toPHP(5.0, $driver));
+		$this->assertSame('0.00001', (string)$type->toPHP(0.00001, $driver));
+		$this->assertSame(['a' => '2.5', 'b' => null], array_map(
+			static fn ($value) => $value === null ? null : (string)$value,
+			$type->manyToPHP(['a' => 2.5, 'b' => null], ['a', 'b'], $driver),
+		));
 	}
 
 }
