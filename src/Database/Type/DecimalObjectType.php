@@ -162,8 +162,8 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 
 			return $this;
 		}
-		if (static::$numberClass === 'Cake\I18n\Number' ||
-			is_subclass_of(static::$numberClass, 'Cake\I18n\Number')
+		if (static::$numberClass === 'Cake\I18n\Number'
+			|| is_subclass_of(static::$numberClass, 'Cake\I18n\Number')
 		) {
 			$this->_useLocaleParser = $enable;
 
@@ -218,9 +218,9 @@ class DecimalObjectType extends BaseType implements BatchCastingInterface {
 			$secondarySize = $secondarySize ?: $primarySize;
 			$lastGroup = array_pop($groups);
 			$firstGroup = array_shift($groups);
-			if ($primarySize < 1 ||
-				!ctype_digit($lastGroup) || strlen($lastGroup) !== $primarySize ||
-				!ctype_digit($firstGroup) || $firstGroup[0] === '0' || strlen($firstGroup) > $secondarySize
+			if ($primarySize < 1
+				|| !ctype_digit($lastGroup) || strlen($lastGroup) !== $primarySize
+				|| !ctype_digit($firstGroup) || $firstGroup[0] === '0' || strlen($firstGroup) > $secondarySize
 			) {
 				return null;
 			}
