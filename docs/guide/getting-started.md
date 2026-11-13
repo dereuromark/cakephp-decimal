@@ -31,4 +31,6 @@ Pass decimal strings to `Decimal::create()` and arithmetic methods. A float may 
 `Decimal` comes from [php-collective/decimal-object](https://php-collective.github.io/decimal-object/). Its documentation covers [arithmetic](https://php-collective.github.io/decimal-object/guide/arithmetic), [rounding](https://php-collective.github.io/decimal-object/guide/rounding), [scale](https://php-collective.github.io/decimal-object/guide/scale) and the [full API](https://php-collective.github.io/decimal-object/reference/api).
 :::
 
+For the reasoning behind a value object instead of floats, integers or strings, see the blog post [Working with decimals in PHP apps](https://www.dereuromark.de/2023/11/27/working-with-decimals-in-php-apps/).
+
 Use `(string)$stored->total` for the decimal representation. For localized display, read [Formatting](./formatting), including its precision limits.

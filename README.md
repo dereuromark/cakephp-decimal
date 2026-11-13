@@ -16,3 +16,5 @@ Read the [documentation](https://dereuromark.github.io/cakephp-decimal/), starti
 Composer defines the supported versions and required extensions. The plugin requires BCMath.
 
 See the [live demo](https://sandbox.dereuromark.de/sandbox/decimal-examples/forms).
+
+The blog post [Working with decimals in PHP apps](https://www.dereuromark.de/2023/11/27/working-with-decimals-in-php-apps/) explains why a value object beats floats, integers and strings for decimal values.
